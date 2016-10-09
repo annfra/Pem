@@ -20,11 +20,20 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path text," + "emotion text);" + "");
+        db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
 
+    }
+
+    public void addEmotion(String emotion)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("emotion",emotion);
+        db.insertOrThrow("emotions", null, values);
     }
 
     public void addPhoto(String path, String emotion)
@@ -36,6 +45,13 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.insertOrThrow("photos", null, values);
     }
 
+    public void delete(String tableName, int id)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = {"" + id};
+        db.delete(tableName,"id=?",args);
+    }
+
     public Cursor givePhotosWithEmotion(String emotion)
     {
         String[] columns = {"id", "path", "emotion"};
@@ -43,6 +59,15 @@ public class SqlliteManager extends SQLiteOpenHelper {
         Cursor cursor = db.query("photos", columns,"emotion like " + "'%" + emotion + "%'", null, null, null, null);
         return cursor;
     }
+
+    public Cursor giveAllEmotions()
+    {
+        String[] columns = {"id", "emotion"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("emotions", columns,null, null, null, null, null);
+        return cursor;
+    }
+
 
 
 }
