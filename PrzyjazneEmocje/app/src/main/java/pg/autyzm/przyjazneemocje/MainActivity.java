@@ -1,9 +1,12 @@
 package pg.autyzm.przyjazneemocje;
 
 import android.database.Cursor;
+import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -55,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
             checkBox.setText(cur.getString(1));
             checkBox.setOnCheckedChangeListener(new myCheckBoxChnageClicker());
         }
+
+
+        final Camera camera = CameraOptions.getCameraInstance();
+        Button captureButton = (Button) findViewById(R.id.cameraButton);
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                camera.takePicture(null, null, CameraOptions.getCameraPhoto());
+            }
+        });
 
     }
     //jako glowna emocja pokazuje sie stara (mimo usuniecia), az do ponownego wyboru
