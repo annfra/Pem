@@ -65,9 +65,21 @@
         android:layout_height="wrap_content"
         android:text="@string/newPhoto"
         android:id="@+id/cameraButton"
-        android:layout_alignTop="@+id/spinner"
-        android:layout_alignLeft="@+id/emotion3"
-        android:layout_alignStart="@+id/emotion3" />
+        android:layout_below="@+id/spinner"
+        android:layout_alignRight="@+id/emotion2"
+        android:layout_alignEnd="@+id/emotion2"
+        android:layout_marginTop="82dp" />
+
+    <Button
+        android:text="ZAPISZ POZIOM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/levelButton"
+        android:onClick="addLevel"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/cameraButton"
+        android:layout_alignLeft="@+id/cameraButton"
+        android:layout_alignStart="@+id/cameraButton" />
 
 
 </RelativeLayout>
