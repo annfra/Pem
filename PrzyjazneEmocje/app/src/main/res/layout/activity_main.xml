@@ -81,5 +81,14 @@
         android:layout_alignLeft="@+id/cameraButton"
         android:layout_alignStart="@+id/cameraButton" />
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_choose_images"
+        android:text="@string/label_choose_images"
+        android:layout_alignTop="@+id/spinner"
+        android:layout_toRightOf="@+id/levelButton"
+        android:layout_toEndOf="@+id/levelButton"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp" />
 </RelativeLayout>

@@ -19,7 +19,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path text," + "emotion text);" + "");
+        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
         db.execSQL("create table levels(" + "id integer primary key autoincrement);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
@@ -40,7 +40,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.insertOrThrow("emotions", null, values);
     }
 
-    public void addPhoto(String path, String emotion)
+    public void addPhoto(int path, String emotion)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();

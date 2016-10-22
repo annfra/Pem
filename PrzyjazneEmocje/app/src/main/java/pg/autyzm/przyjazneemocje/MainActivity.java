@@ -1,5 +1,6 @@
 package pg.autyzm.przyjazneemocje;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,10 @@ import android.widget.CompoundButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import pg.autyzm.przyjazneemocje.chooseImages.ChooseImages;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
 
     List<String> emotionsList = new ArrayList<String>();
     @Override
@@ -45,9 +49,13 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
         //na sztywno dodajemy?
-        sqlm.addEmotion("sad");
+       // sqlm.addEmotion("sad");
         sqlm.addEmotion("happy");
         sqlm.addEmotion("angry");
+       // sqlm.addEmotion("scared");
+        sqlm.addEmotion("surprised");
+
+
 
         Cursor cur = sqlm.giveAllEmotions();
         while(cur.moveToNext())
@@ -68,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 camera.takePicture(null, null, CameraOptions.getCameraPhoto());
             }
         });
+
+        View buttonChoose = findViewById(R.id.button_choose_images);
+        buttonChoose.setOnClickListener(this);
 
     }
     //jako glowna emocja pokazuje sie stara (mimo usuniecia), az do ponownego wyboru
@@ -124,10 +135,16 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("addLevel");
 
 
+    }
 
-
-
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_choose_images:
+                Intent i = new Intent(this,ChooseImages.class);
+                startActivity(i);
+                break;
+        }
     }
 
 }

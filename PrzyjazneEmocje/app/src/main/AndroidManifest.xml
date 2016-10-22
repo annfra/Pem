@@ -12,13 +12,14 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
+        </activity>
+        <activity android:name=".chooseImages.ChooseImages"
+            android:label="@string/title_choose_img"
+            android:theme="@android:style/Theme.Dialog">
         </activity>
     </application>
 
