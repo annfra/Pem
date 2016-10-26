@@ -77,9 +77,9 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public Cursor giveAllEmotions()
     {
-        String[] columns = {"id", "photos_or_videos", "photos_or_videos_per", "time_limit"};
+        String[] columns = {"id","emotion"};//"photos_or_videos", "photos_or_videos_per", "time_limit"
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
+        Cursor cursor = db.query("emotions", columns,null, null, null, null, null);
         return cursor;
     }
 
