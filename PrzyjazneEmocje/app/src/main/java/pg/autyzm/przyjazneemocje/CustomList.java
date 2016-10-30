@@ -1,36 +1,89 @@
 package pg.autyzm.przyjazneemocje;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class CustomList extends ArrayAdapter<String>{
+import java.util.ArrayList;
 
-    private final Activity context;
-    private final String[] web;
-    private final Integer[] imageId;
-    public CustomList(Activity context,
-                      String[] web, Integer[] imageId) {
-        super(context, R.layout.list_single, web);
+public class CustomList extends BaseAdapter implements ListAdapter {
+    private ArrayList<String> list = new ArrayList<String>();
+    private Context context;
+
+
+
+    public CustomList(ArrayList<String> list, Context context) {
+        this.list = list;
         this.context = context;
-        this.web = web;
-        this.imageId = imageId;
-
     }
+
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
-        View rowView= inflater.inflate(R.layout.list_single, null, true);
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
+    public int getCount() {
+        return list.size();
+    }
 
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-        txtTitle.setText(web[position]);
+    @Override
+    public Object getItem(int pos) {
+        return list.get(pos);
+    }
 
-        imageView.setImageResource(imageId[position]);
-        return rowView;
+    @Override
+    public long getItemId(int pos) {
+        //return list.get(pos).getId();
+        //just return 0 if your list items do not have an Id variable.
+        return 0;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+        if (view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.list_single, null);
+        }
+
+        //Handle TextView and display string from your list
+        TextView listItemText = (TextView)view.findViewById(R.id.list_item_string);
+        listItemText.setText(list.get(position));
+
+        //Handle buttons and add onClickListeners
+        Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
+        Button editBtn = (Button)view.findViewById(R.id.edit_btn);
+        Button activeBtn = (Button)view.findViewById(R.id.active_btn);
+
+
+        deleteBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                list.remove(position); //or some other task
+                notifyDataSetChanged();
+            }
+        });
+        editBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                notifyDataSetChanged();
+            }
+        });
+
+        activeBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+                notifyDataSetChanged();
+            }
+        });
+
+        return view;
     }
 }

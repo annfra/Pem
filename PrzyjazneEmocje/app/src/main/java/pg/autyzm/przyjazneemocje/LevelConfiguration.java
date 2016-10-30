@@ -32,7 +32,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         TextView textPhotos = (TextView) findViewById(R.id.photos);
 
-        this.deleteDatabase("friendly_emotions.db");
+        //this.deleteDatabase("friendly_emotions.db");
 
         sqlm = new SqlliteManager(this);
         /*sqlm.addPhoto("D:nagiefotki:asia.png", "gniew");
@@ -64,6 +64,10 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         {
             String emotionId = "emotion" + cur.getInt(0);
             int resID = getResources().getIdentifier(emotionId, "id", getPackageName());
+            System.out.println("Okon " + resID);
+
+            if(resID == 0) break;
+
             CheckBox checkBox = (CheckBox)findViewById(resID);
             checkBox.setText(cur.getString(1));
             checkBox.setOnCheckedChangeListener(new myCheckBoxChnageClicker());
