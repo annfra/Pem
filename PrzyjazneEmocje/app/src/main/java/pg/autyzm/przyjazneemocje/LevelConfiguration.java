@@ -158,33 +158,6 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     }
 
 
-    public void updateLevelList(){
-
-
-        Cursor cur = sqlm.giveAllLevels();
-
-        ArrayAdapter<String> adapter;
-        Spinner spinner = (Spinner)findViewById(R.id.spinner3);
-        List<String> list;
-        list = new ArrayList<String>();
-
-        while(cur.moveToNext())
-        {
-            String levelId = "Level " + cur.getInt(0);
-            list.add(levelId);
-            System.out.println("Dodano nowy element do listy");
-
-        }
-
-        adapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_spinner_item, list);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        System.out.println("Item list updated");
-
-    }
-
 
 
 
@@ -254,7 +227,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         sqlm.addLevel(l);
 
-        updateLevelList();
+
 
     }
 

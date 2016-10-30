@@ -131,16 +131,6 @@
         android:layout_alignLeft="@+id/time_limit"
         android:layout_alignStart="@+id/time_limit" />
 
-    <Spinner
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner3"
-        android:layout_alignTop="@+id/levelButton"
-        android:layout_toRightOf="@+id/emotion3"
-        android:layout_toEndOf="@+id/emotion3"
-        android:layout_marginLeft="122dp"
-        android:layout_marginStart="122dp"
-        android:layout_marginTop="12dp" />
 
     <TextView
         android:text="Time Limit"

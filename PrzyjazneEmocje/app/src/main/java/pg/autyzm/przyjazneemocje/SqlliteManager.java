@@ -82,7 +82,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
 
 
-        for(String photoOrVideo : level.photosOrVideosList){
+        for(Integer photoOrVideo : level.photosOrVideosList){
 
             values = new ContentValues();
             values.put("levelid",level.id);

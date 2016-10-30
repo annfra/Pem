@@ -17,8 +17,8 @@ public class Level {
     int pvPerLevel;
     boolean isLevelActive;
 
-    List<String> photosOrVideosList;
-    List<String> emotions;
+    List<Integer> photosOrVideosList;
+    List<Integer> emotions;
 
 
 
@@ -41,7 +41,7 @@ public class Level {
 
             while(cur2.moveToNext()){
 
-                photosOrVideosList.add(cur.getString(cur.getColumnIndex("photoid")));
+                photosOrVideosList.add(cur.getInt(cur.getColumnIndex("photoid")));
 
             }
         }
@@ -54,8 +54,8 @@ public class Level {
 
     public Level(){
 
-        photosOrVideosList = new ArrayList<String>();
-        emotions = new ArrayList<String>();
+        photosOrVideosList = new ArrayList<Integer>();
+        emotions = new ArrayList<Integer>();
 
         isLevelActive = true;
         id = 0;
