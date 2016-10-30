@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.SpannedString;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -11,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,31 +40,33 @@ public class ChooseImages extends Activity {
 
         SqlliteManager sqlm = new SqlliteManager(this);
 
-        //TODO
-        sqlm.addPhoto(R.drawable.happy1,"happy");
-        sqlm.addPhoto(R.drawable.happy2,"happy");
-        sqlm.addPhoto(R.drawable.happy3,"happy");
-        sqlm.addPhoto(R.drawable.happy4,"happy");
-        sqlm.addPhoto(R.drawable.happy5,"happy");
-        sqlm.addPhoto(R.drawable.happy6,"happy");
-        sqlm.addPhoto(R.drawable.happy7,"happy");
-        sqlm.addPhoto(R.drawable.angry,"angry");
-        sqlm.addPhoto(R.drawable.angry1,"angry");
-        sqlm.addPhoto(R.drawable.angry2,"angry");
-        sqlm.addPhoto(R.drawable.scared1,"scared");
-        sqlm.addPhoto(R.drawable.surprised1,"surprised");
-        sqlm.addPhoto(R.drawable.surprised2,"surprised");
-        sqlm.addPhoto(R.drawable.surprised3,"surprised");
+        sqlm.cleanTable("photos"); //TODO not clean and add, but only update
+
+        Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
+        for (Field f : drawables) {
+            try {
+                String emotName = f.getName();
+                int resID = getResources().getIdentifier(emotName , "drawable", getPackageName()); //zamiast resID po prostu od 0 iteracja
+                if(emotName.contains("happy"))
+                    sqlm.addPhoto(resID,"happy");
+                else if(emotName.contains("angry"))
+                    sqlm.addPhoto(resID,"angry");
+                else if(emotName.contains("surprised"))
+                    sqlm.addPhoto(resID,"surprised");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         List<RowBean> elem = new ArrayList<RowBean>();
-        Spinner ss = (Spinner)findViewById(R.id.spinner);
-      //  String sss = ss.getSelectedItem().toString();
 
-        String choosenEmotion = "happy";
+        Bundle bundle = getIntent().getExtras();
+        String choosenEmotion = bundle.getString("SpinnerValue");
+
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
 
         TextView tv = (TextView)findViewById(R.id.TextViewChoose);
-      //  tv.setText(sss);//choosenEmotion);
+        //  tv.setText(sss);//choosenEmotion);
 
         int n = cursor.getCount();
         RowBean[] tab = new RowBean[n];

@@ -13,23 +13,27 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <Button
+    <ImageButton
+        android:src="@drawable/icon_delete"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
         android:id="@+id/delete_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
-        android:text="Delete" />
+        android:layout_marginRight="5dp" />
 
-    <Button
+    <ImageButton
+        android:src="@drawable/icon_edit"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
         android:id="@+id/edit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/delete_btn"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:text="Edit" />
+        android:layout_marginRight="10dp" />
 
     <Button
         android:id="@+id/active_btn"

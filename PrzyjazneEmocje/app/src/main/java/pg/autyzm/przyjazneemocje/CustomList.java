@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -62,8 +63,8 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         listItemText.setText(list.get(position));
 
         //Handle buttons and add onClickListeners
-        Button deleteBtn = (Button)view.findViewById(R.id.delete_btn);
-        Button editBtn = (Button)view.findViewById(R.id.edit_btn);
+        ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.delete_btn);
+        ImageButton editBtn = (ImageButton)view.findViewById(R.id.edit_btn);
         Button activeBtn = (Button)view.findViewById(R.id.active_btn);
 
 

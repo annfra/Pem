@@ -80,6 +80,12 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.delete(tableName,"id=?",args);
     }
 
+    public void cleanTable(String tableName)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from "+ tableName);
+    }
+
     public Cursor givePhotosWithEmotion(String emotion)
     {
         String[] columns = {"id", "path", "emotion"};

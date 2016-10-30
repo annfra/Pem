@@ -84,14 +84,20 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         }
 
 
-        final Camera camera = CameraOptions.getCameraInstance();
+        //Wywolanie kamery - nie dziala na emulatorze
+        /*final Camera camera = CameraOptions.getCameraInstance();
+        final CameraPreview cameraPreview = new CameraPreview(this, camera);
+
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.addView(cameraPreview);
+
         Button captureButton = (Button) findViewById(R.id.cameraButton);
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                camera.takePicture(null, null, CameraOptions.getCameraPhoto());
+                camera.takePicture(null, null,  CameraOptions.getCameraPhoto());
             }
-        });
+        });*/
 
         View buttonChoose = findViewById(R.id.button_choose_images);
         buttonChoose.setOnClickListener(this);
@@ -247,6 +253,13 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         switch (v.getId()){
             case R.id.button_choose_images:
                 Intent i = new Intent(this,ChooseImages.class);
+
+                Spinner spinner = (Spinner)findViewById(R.id.spinner);
+                Bundle bundle = new Bundle();
+                bundle.putString("SpinnerValue",spinner.getSelectedItem().toString());
+                i.putExtras(bundle);
+
+
                 startActivity(i);
                 break;
         }

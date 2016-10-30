@@ -1,4 +1,4 @@
-package pg.autyzm.przyjazneemocje;
+package pg.autyzm.przyjazneemocje.chooseImages.Camera;
 
 import android.app.Activity;
 import android.hardware.Camera;
@@ -49,7 +49,7 @@ public class CameraOptions {
         }
         return c;
     }
-     //tutaj jest definiowany katalog!!
+    //tutaj jest definiowany katalog!!
     private static File getPhoto() {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"MyCameraApp");
         if (!mediaStorageDir.exists()) {
@@ -66,3 +66,4 @@ public class CameraOptions {
     }
 
 }
+
