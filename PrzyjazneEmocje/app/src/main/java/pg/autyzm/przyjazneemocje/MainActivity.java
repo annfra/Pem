@@ -35,12 +35,19 @@ public class MainActivity extends Activity {
         //generate list
 
 
-        //instantiate custom adapter
-        CustomList adapter = new CustomList(list, this);
 
-        //handle listview and assign adapter
-        ListView lView = (ListView) findViewById(R.id.list);
-        lView.setAdapter(adapter);
+    }
+
+    // napisuje, bo chce, by po dodaniu poziomu lista poziomow w main activity automatycznie sie odswiezala - Pawel
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        //Refresh your stuff here
+
+        updateLevelList();
+
+
     }
 
 
@@ -68,6 +75,14 @@ public class MainActivity extends Activity {
             System.out.println("Dodano nowy element do listy");
 
         }
+
+        //instantiate custom adapter
+        CustomList adapter = new CustomList(list, this);
+
+        //handle listview and assign adapter
+        ListView lView = (ListView) findViewById(R.id.list);
+        lView.setAdapter(adapter);
+
 
 
         System.out.println("Item list updated");

@@ -106,25 +106,25 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         //updateLevelList();
 
         // jesli zostal przechwycony jakis id, to znaczy ze jestemy w trybie edycji poziomu, a nie jego tworzenia
+        // ladujemy do interfejsu wartosci z rekordu tabeli Level
         if(value > 0){
 
             editedLevelId = value;
 
-            Cursor cur2 = sqlm.giveLevel(value);
+            Cursor cur2 = sqlm.giveLevel(editedLevelId);
+            Cursor cur3 = sqlm.giveEmotionsInLevel(editedLevelId);
 
-            Level l = new Level(cur2);
+            Level l = new Level(cur2, cur3);
 
             EditText timeLimit = (EditText)findViewById(R.id.time_limit);
-            EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_limit);
+            EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
             Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
 
 
 
-            System.out.println(l.timeLimit);
             timeLimit.setText(Integer.toString(l.timeLimit));
             vpPerLevel.setText(Integer.toString(l.pvPerLevel));
 
-            System.out.println(l.photosOrVideos);
 
             if(l.photosOrVideos.equals("Videos")){
                 photosOrVideos.setSelection(0);
@@ -133,7 +133,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                 photosOrVideos.setSelection(1);
             }
 
-
+            // Do zrobienia: zaladowac z Level.photosOrVideosList zdjecia do interfejsu
 
         }
 
@@ -233,7 +233,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         EditText timeLimit = (EditText)findViewById(R.id.time_limit);
-        EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_limit);
+        EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
 
         l.timeLimit = Integer.parseInt(timeLimit.getText() + "");
         l.pvPerLevel = Integer.parseInt(vpPerLevel.getText() + "");
@@ -241,6 +241,16 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         if(editedLevelId > 0){
             l.id = editedLevelId;
         }
+
+
+        /*
+
+            Do zrobienia: tutaj trzeba zrobić rozpoznanie, które zdjęcia zostały zaznaczone w interfejsie, a następnie
+             ich podpiecie do pola photosOrVideosList w obiektcie Level, by potem zapisac to do bazy
+
+         */
+
+
 
         sqlm.addLevel(l);
 

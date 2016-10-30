@@ -23,7 +23,7 @@ public class Level {
 
 
 
-    public Level(Cursor cur){
+    public Level(Cursor cur, Cursor cur2){
 
         while(cur.moveToNext())
         {
@@ -35,6 +35,15 @@ public class Level {
 
             isLevelActive = (active != 0);
 
+        }
+
+        if(cur2 != null){
+
+            while(cur2.moveToNext()){
+
+                photosOrVideosList.add(cur.getString(cur.getColumnIndex("photoid")));
+
+            }
         }
 
     }

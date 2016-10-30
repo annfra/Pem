@@ -73,11 +73,9 @@ public class CustomList extends BaseAdapter implements ListAdapter {
             public void onClick(View v) {
                 //do something
 
-                sqlm.delete("levels", findLevelId(position));
-
+                sqlm.delete("levels", "id", String.valueOf(findLevelId(position)));
+                sqlm.delete("levels_photos", "levelid", String.valueOf(findLevelId(position)));
                 list.remove(position); //or some other task
-
-
 
 
                 notifyDataSetChanged();
@@ -125,13 +123,11 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                 //
 
-                Level l = new Level(cur);
+                Level l = new Level(cur, null);
 
-                System.out.println(l.isLevelActive);
 
                 l.isLevelActive = ! l.isLevelActive;
 
-                System.out.println(l.isLevelActive);
 
                 //
 
@@ -154,7 +150,6 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         String[] splittedLevelString = levelString.split(" ");
         int levelId = Integer.parseInt(splittedLevelString[1]);
 
-        System.out.println(levelId);
 
         return levelId;
 

@@ -96,7 +96,7 @@
         android:layout_marginStart="20dp" />
 
     <EditText
-        android:text="Time Limit"
+        android:text="60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -109,14 +109,14 @@
         android:id="@+id/time_limit" />
 
     <EditText
-        android:text="Videos/photos per level"
+        android:text="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
         android:layout_marginLeft="34dp"
         android:layout_marginStart="34dp"
-        android:id="@+id/pv_per_limit"
+        android:id="@+id/pv_per_level"
         android:layout_alignBaseline="@+id/time_limit"
         android:layout_alignBottom="@+id/time_limit"
         android:layout_toRightOf="@+id/time_limit"
@@ -141,5 +141,25 @@
         android:layout_marginLeft="122dp"
         android:layout_marginStart="122dp"
         android:layout_marginTop="12dp" />
+
+    <TextView
+        android:text="Time Limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/photos"
+        android:layout_alignLeft="@+id/time_limit"
+        android:layout_alignStart="@+id/time_limit"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:text="Photos/Videos per level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toRightOf="@+id/time_limit"
+        android:layout_toEndOf="@+id/time_limit"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:id="@+id/textView2" />
 
 </RelativeLayout>

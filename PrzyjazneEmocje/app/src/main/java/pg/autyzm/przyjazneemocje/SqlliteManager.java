@@ -59,25 +59,46 @@ public class SqlliteManager extends SQLiteOpenHelper {
         values.put("time_limit",level.timeLimit);
         values.put("is_level_active", level.isLevelActive);
 
-        System.out.println("Do bazy idzie " + level.isLevelActive);
 
         if(level.id != 0) {
             //values.put("id", level.id);
             System.out.println("Update, time limit " + level.timeLimit);
             db.update("levels", values, "id=" + level.id, null);
+
+            /*
+                usunac wszystkie rekordy polaczone z tym poziomem.
+
+            */
+
+            delete("levels_photos", "levelid", String.valueOf(level.id));
+
         }
         else {
-
-            db.insertOrThrow("levels", null, values);
-
+            long longId = db.insertOrThrow("levels", null, values);
+            level.id = (int) longId;
         }
+
+        // Dodaj rekordy wiele do wielu ze zdjeciami/video
+
+
+
+        for(String photoOrVideo : level.photosOrVideosList){
+
+            values = new ContentValues();
+            values.put("levelid",level.id);
+            values.put("photoid",photoOrVideo);
+
+            db.insertOrThrow("levels_photos", null, values);
+        }
+
+
     }
 
-    public void delete(String tableName, int id)
+    public void delete(String tableName, String columnName, String value)
     {
         SQLiteDatabase db = getWritableDatabase();
-        String[] args = {"" + id};
-        db.delete(tableName,"id=?",args);
+        String[] args = {"" + value};
+        db.delete(tableName, columnName + "=?",args);
     }
 
     public void cleanTable(String tableName)
@@ -91,6 +112,14 @@ public class SqlliteManager extends SQLiteOpenHelper {
         String[] columns = {"id", "path", "emotion"};
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("photos", columns,"emotion like " + "'%" + emotion + "%'", null, null, null, null);
+        return cursor;
+    }
+
+    public Cursor giveEmotionsInLevel(int levelId)
+    {
+        String[] columns = {"id", "levelid", "photoid"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("levels_photos", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
         return cursor;
     }
 
