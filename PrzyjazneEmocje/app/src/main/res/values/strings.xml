@@ -6,11 +6,10 @@
     <string name="title_choose_img">Wybierz zdjęcia</string>
 
 
-
-        <string-array name="spinner">
-            <item>Videos</item>
-            <item>Photos</item>
-        </string-array>
+    <string-array name="spinner">
+        <item>Videos</item>
+        <item>Photos</item>
+    </string-array>
 
 
 </resources>
