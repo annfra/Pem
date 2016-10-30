@@ -38,6 +38,6 @@
         android:layout_toLeftOf="@id/edit_btn"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:text="Add" />
+        android:text="Active" />
 
 </RelativeLayout>

@@ -25,10 +25,22 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
     List<String> emotionsList = new ArrayList<String>();
     public SqlliteManager sqlm;
+    int editedLevelId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_configuration);
+
+        Bundle b = getIntent().getExtras();
+        int value = -1; // or other values
+        if(b != null)
+            value = b.getInt("key");
+        System.out.println(value + " to zostalo przekazane do konfiguracji");
+
+
+
+
 
         TextView textPhotos = (TextView) findViewById(R.id.photos);
 
@@ -64,8 +76,6 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         {
             String emotionId = "emotion" + cur.getInt(0);
             int resID = getResources().getIdentifier(emotionId, "id", getPackageName());
-            System.out.println("Okon " + resID);
-
             if(resID == 0) break;
 
             CheckBox checkBox = (CheckBox)findViewById(resID);
@@ -87,8 +97,39 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         buttonChoose.setOnClickListener(this);
 
 
-        updateLevelList();
+        //updateLevelList();
 
+        // jesli zostal przechwycony jakis id, to znaczy ze jestemy w trybie edycji poziomu, a nie jego tworzenia
+        if(value > 0){
+
+            editedLevelId = value;
+
+            Cursor cur2 = sqlm.giveLevel(value);
+
+            Level l = new Level(cur2);
+
+            EditText timeLimit = (EditText)findViewById(R.id.time_limit);
+            EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_limit);
+            Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
+
+
+
+            System.out.println(l.timeLimit);
+            timeLimit.setText(Integer.toString(l.timeLimit));
+            vpPerLevel.setText(Integer.toString(l.pvPerLevel));
+
+            System.out.println(l.photosOrVideos);
+
+            if(l.photosOrVideos.equals("Videos")){
+                photosOrVideos.setSelection(0);
+            }
+            else{
+                photosOrVideos.setSelection(1);
+            }
+
+
+
+        }
 
 
     }
@@ -186,11 +227,14 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         EditText timeLimit = (EditText)findViewById(R.id.time_limit);
-        EditText vpPerLevel = (EditText)findViewById(R.id.time_limit);
+        EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_limit);
 
         l.timeLimit = Integer.parseInt(timeLimit.getText() + "");
         l.pvPerLevel = Integer.parseInt(vpPerLevel.getText() + "");
 
+        if(editedLevelId > 0){
+            l.id = editedLevelId;
+        }
 
         sqlm.addLevel(l);
 

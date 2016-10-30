@@ -22,6 +22,7 @@ public class MainActivity extends Activity {
     public SqlliteManager sqlm;
     ArrayList<String> list;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
