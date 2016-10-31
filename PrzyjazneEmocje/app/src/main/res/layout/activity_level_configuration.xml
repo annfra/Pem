@@ -35,11 +35,11 @@
         android:layout_height="wrap_content"
         android:text="New CheckBox"
         android:id="@+id/emotion2"
-        android:layout_below="@+id/emotion1"
+        android:checked="false"
+        android:layout_alignBaseline="@+id/time_limit"
+        android:layout_alignBottom="@+id/time_limit"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="39dp"
-        android:checked="false" />
+        android:layout_alignParentStart="true" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -60,40 +60,6 @@
         android:layout_below="@+id/emotion2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/newPhoto"
-        android:id="@+id/cameraButton"
-        android:layout_below="@+id/spinner"
-        android:layout_alignRight="@+id/emotion2"
-        android:layout_alignEnd="@+id/emotion2"
-        android:layout_marginTop="82dp" />
-
-    <ImageButton
-        android:src="@drawable/icon_save"
-        android:scaleType="fitXY"
-        android:background="@null"
-        android:layout_width="80dip"
-        android:layout_height="80dip"
-        android:id="@+id/levelButton"
-        android:onClick="addLevel"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/cameraButton"
-        android:layout_alignLeft="@+id/cameraButton"
-        android:layout_alignStart="@+id/cameraButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_choose_images"
-        android:text="@string/label_choose_images"
-        android:layout_alignTop="@+id/spinner"
-        android:layout_toRightOf="@+id/levelButton"
-        android:layout_toEndOf="@+id/levelButton"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp" />
 
     <EditText
         android:text="60"
@@ -151,5 +117,46 @@
         android:layout_marginLeft="11dp"
         android:layout_marginStart="11dp"
         android:id="@+id/textView2" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/newPhoto"
+        android:id="@+id/cameraButton"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/spinner2"
+        android:layout_toStartOf="@+id/spinner2"
+        android:layout_marginBottom="21dp" />
+
+    <ImageButton
+        android:src="@drawable/icon_save"
+        android:scaleType="fitXY"
+        android:background="@null"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:id="@+id/levelButton"
+        android:onClick="addLevel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/button_choose_images"
+        android:layout_alignStart="@+id/button_choose_images" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_choose_images"
+        android:text="@string/label_choose_images"
+        android:layout_alignBottom="@+id/spinner"
+        android:layout_alignLeft="@+id/emotion3"
+        android:layout_alignStart="@+id/emotion3" />
+
+    <TextView
+        android:text="@string/default_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imagesCount"
+        android:layout_below="@+id/spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -6,16 +6,32 @@ package pg.autyzm.przyjazneemocje.chooseImages;
 
 public class RowBean {
 
-    public int icon;
-    public String title;
+    int icon;
+    boolean selected;
+
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     public RowBean(){
 
     }
 
-    public RowBean(int icon, String title) {
+    public RowBean(int icon, boolean selected) {
 
         this.icon = icon;
-        this.title = title;
+        this.selected = selected;
     }
 }

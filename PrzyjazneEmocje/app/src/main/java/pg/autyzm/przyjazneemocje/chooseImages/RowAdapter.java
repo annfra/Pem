@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 import pg.autyzm.przyjazneemocje.R;
 
@@ -17,9 +20,11 @@ import pg.autyzm.przyjazneemocje.R;
 
 public class RowAdapter extends ArrayAdapter<RowBean> {
 
-    Context context;
     int layoutResourceId;
     RowBean data[] = null;
+
+    private List<RowBean> rowBeanList;
+    private Context context;
 
     public RowAdapter(Context context, int layoutResourceId, RowBean[] data) {
         super(context, layoutResourceId, data);
@@ -40,7 +45,9 @@ public class RowAdapter extends ArrayAdapter<RowBean> {
 
             holder = new RowBeanHolder();
             holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
-            holder.txtTitle = (TextView)row.findViewById(R.id.txtTitle);
+            holder.checkBox = (CheckBox) row.findViewById(R.id.checkBoxImagesToChoose);
+
+            holder.checkBox.setOnCheckedChangeListener((ChooseImages)context);
 
             row.setTag(holder);
         }
@@ -50,15 +57,15 @@ public class RowAdapter extends ArrayAdapter<RowBean> {
         }
 
         RowBean object = data[position];
-        holder.txtTitle.setText(object.title);
         holder.imgIcon.setImageResource(object.icon);
+        holder.checkBox.setChecked(object.selected);
 
         return row;
     }
 
     static class RowBeanHolder
     {
-        ImageView imgIcon;
-        TextView txtTitle;
+        public ImageView imgIcon;
+        public CheckBox checkBox;
     }
 }

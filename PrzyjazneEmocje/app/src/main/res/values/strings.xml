@@ -4,6 +4,7 @@
     <string name="text_choose">Wybierz zdjęcia</string>
     <string name="label_choose_images">Wybierz</string>
     <string name="title_choose_img">Wybierz zdjęcia</string>
+    <string name="default_message">Nie wybrano zdjęć</string>
 
 
     <string-array name="spinner">

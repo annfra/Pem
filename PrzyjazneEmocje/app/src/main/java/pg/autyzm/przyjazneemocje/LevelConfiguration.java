@@ -27,6 +27,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     public SqlliteManager sqlm;
     int editedLevelId;
 
+    List<Integer> photosOrVideosList = new ArrayList<Integer>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,6 +218,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         }
 
 
+
         /*
 
             Do zrobienia: tutaj trzeba zrobić rozpoznanie, które zdjęcia zostały zaznaczone w interfejsie, a następnie
@@ -224,10 +227,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
          */
 
 
-
         sqlm.addLevel(l);
-
-
 
     }
 
@@ -235,17 +235,31 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_choose_images:
-                Intent i = new Intent(this,ChooseImages.class);
-
                 Spinner spinner = (Spinner)findViewById(R.id.spinner);
                 Bundle bundle = new Bundle();
-                bundle.putString("SpinnerValue",spinner.getSelectedItem().toString());
+                bundle.putString("SpinnerValue",spinner.getSelectedItem().toString());      //TODO gdy mamy zaznaczone wszystkie i jedno się odznaczy to przesyła ostatnio zaznaczoną emocję
+                Intent i = new Intent(this,ChooseImages.class);
                 i.putExtras(bundle);
-
-
-                startActivity(i);
+                startActivityForResult(i,1);
                 break;
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String choosenImg="";
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                //zdjęcia w Stringu rozdzielone ;
+                Bundle bundle = data.getExtras();
+                choosenImg = bundle.getString("choosenImages");
+                String[] spilt =choosenImg.split(";");
+                for(String r:spilt){
+                    photosOrVideosList.add(Integer.parseInt(r));
+                }
+                TextView tv = (TextView) findViewById(R.id.imagesCount);
+                tv.setText("wybranych: " + photosOrVideosList.size());
+            }
+        }
 
+    }
 }
