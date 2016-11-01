@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Przyjazne Emocje - Konfiguracja</string>
+    <string name="newPhoto">Zrób nowe</string>
+    <string name="label_choose_images">Wybierz</string>
+    <string name="title_choose_img">Wybierz zdjęcia</string>
+    <string name="default_message">Nie wybrano zdjęć</string>
+    <string name="select">wybrano</string>
+    <string name="pv_per_level">Zdjęcia/filmy na poziom</string>
+    <string name="time_limit">Limit czasu</string>
+    <string name="label_emotion">Uczone emocje:</string>
+
+    <string name="emotion_happy">wesoły</string>
+    <string name="emotion_sad">smutny</string>
+    <string name="emotion_surprised">zdziwiony</string>
+    <string name="emotion_angry">zły</string>
+    <string name="emotion_scared">przestraszony</string>
+    <string name="emotion_bored">znudzony</string>
+
+    <string-array name="spinner">
+        <item>Zdjęcia</item>
+        <item>Filmy</item>
+    </string-array>
+
+
+</resources>

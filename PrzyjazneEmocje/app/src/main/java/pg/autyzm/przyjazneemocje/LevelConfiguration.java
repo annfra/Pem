@@ -3,6 +3,7 @@ package pg.autyzm.przyjazneemocje;
 import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.chooseImages.ChooseImages;
 
@@ -65,12 +67,21 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         }*/
 
         //na sztywno dodajemy?
-        // sqlm.addEmotion("sad");
         sqlm.addEmotion("happy");
+        sqlm.addEmotion("sad");
         sqlm.addEmotion("angry");
-        // sqlm.addEmotion("scared");
+        sqlm.addEmotion("scared");
         sqlm.addEmotion("surprised");
+        sqlm.addEmotion("bored");
 
+
+        Map<String, String> mapEmo = new ArrayMap<>();
+        mapEmo.put("happy",getResources().getString(R.string.emotion_happy));
+        mapEmo.put("sad",getResources().getString(R.string.emotion_sad));
+        mapEmo.put("angry",getResources().getString(R.string.emotion_angry));
+        mapEmo.put("scared",getResources().getString(R.string.emotion_scared));
+        mapEmo.put("surprised",getResources().getString(R.string.emotion_surprised));
+        mapEmo.put("bored",getResources().getString(R.string.emotion_bored));
 
 
         Cursor cur = sqlm.giveAllEmotions();
@@ -81,7 +92,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
             if(resID == 0) break;
 
             CheckBox checkBox = (CheckBox)findViewById(resID);
-            checkBox.setText(cur.getString(1));
+            checkBox.setText(mapEmo.get(cur.getString(1)));
             checkBox.setOnCheckedChangeListener(new myCheckBoxChnageClicker());
         }
 
@@ -257,7 +268,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                     photosOrVideosList.add(Integer.parseInt(r));
                 }
                 TextView tv = (TextView) findViewById(R.id.imagesCount);
-                tv.setText("wybranych: " + photosOrVideosList.size());
+                String str = getResources().getString(R.string.select);
+                tv.setText(str + ": " + photosOrVideosList.size());
             }
         }
 

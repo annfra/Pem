@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.SpannedString;
+import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.R;
@@ -33,6 +35,7 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
     private String choosenEmotion;
     private RowBean[] tabPhotos;
     private TextView textView;
+    private String emoInLanguage;
 
     public void saveImagesToList(View view) {
         String out = "";
@@ -79,10 +82,21 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
         }
 
         Bundle bundle = getIntent().getExtras();
-        choosenEmotion = bundle.getString("SpinnerValue");
+        emoInLanguage = bundle.getString("SpinnerValue");
+
+        Map<String, String> mapEmo = new ArrayMap<>();
+        mapEmo.put(getResources().getString(R.string.emotion_happy),"happy");
+        mapEmo.put(getResources().getString(R.string.emotion_sad),"sad");
+        mapEmo.put(getResources().getString(R.string.emotion_angry),"angry");
+        mapEmo.put(getResources().getString(R.string.emotion_scared),"scared");
+        mapEmo.put(getResources().getString(R.string.emotion_surprised),"surprised");
+        mapEmo.put(getResources().getString(R.string.emotion_bored),"bored");
+
+        choosenEmotion = mapEmo.get(emoInLanguage);
 
         textView = (TextView) findViewById(R.id.TextViewChoose);
-        textView.setText(choosenEmotion + " wybrano: 0");
+        String str = getResources().getString(R.string.select);
+        textView.setText(emoInLanguage + " " + str + ": 0");
 
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
         int n = cursor.getCount();
@@ -113,7 +127,8 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
                     numberOfPhotos++;
                 }
             }
-            textView.setText(choosenEmotion + " wybrano: " + numberOfPhotos);
+            String str = getResources().getString(R.string.select);
+            textView.setText(emoInLanguage + " " + str + ": " + numberOfPhotos);
         } catch ( Exception e ){
             e.printStackTrace();
         }
