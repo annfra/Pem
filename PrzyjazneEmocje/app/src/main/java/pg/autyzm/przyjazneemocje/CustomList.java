@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,12 +24,14 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class CustomList extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list = new ArrayList<String>();
+    private ArrayList<Boolean> active_list = new ArrayList<Boolean>();
     private Context context;
     public SqlliteManager sqlm;
 
 
-    public CustomList(ArrayList<String> list, Context context) {
+    public CustomList(ArrayList<String> list, ArrayList<Boolean> active_list, Context context) {
         this.list = list;
+        this.active_list = active_list;
         this.context = context;
         sqlm = new SqlliteManager(context);
     }
@@ -62,10 +65,17 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         TextView listItemText = (TextView)view.findViewById(R.id.list_item_string);
         listItemText.setText(list.get(position));
 
+
+
         //Handle buttons and add onClickListeners
         ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.delete_btn);
         ImageButton editBtn = (ImageButton)view.findViewById(R.id.edit_btn);
         Button activeBtn = (Button)view.findViewById(R.id.active_btn);
+        CheckBox activeChck = (CheckBox) view.findViewById(R.id.active_chck);
+
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + active_list.get(position));
+        activeChck.setChecked(active_list.get(position));
 
 
         deleteBtn.setOnClickListener(new View.OnClickListener(){
@@ -134,8 +144,46 @@ public class CustomList extends BaseAdapter implements ListAdapter {
                 sqlm.addLevel(l);
 
                 notifyDataSetChanged();
+
+
             }
         });
+
+
+
+        activeChck.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //do something
+
+                /*
+
+                    1. znajdz id poziomu
+                    2. pobierz poziom z bazy
+                    3. edytuj go
+                    4. zapisz go do bazy
+
+                    */
+
+                Cursor cur = sqlm.giveLevel(findLevelId(position));
+
+                //
+
+                Level l = new Level(cur, null);
+
+
+                l.isLevelActive = ! l.isLevelActive;
+                active_list.set(position, l.isLevelActive);
+
+                //
+
+                sqlm.addLevel(l);
+
+                notifyDataSetChanged();
+            }
+        });
+
+
 
 
         return view;

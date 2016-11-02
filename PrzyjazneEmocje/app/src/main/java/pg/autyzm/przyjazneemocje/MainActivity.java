@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 
     public SqlliteManager sqlm;
     ArrayList<String> list;
+    ArrayList<Boolean> active_list;
 
 
     @Override
@@ -67,17 +68,24 @@ public class MainActivity extends Activity {
 
         Cursor cur = sqlm.giveAllLevels();
         list = new ArrayList<String>();
+        active_list = new ArrayList<Boolean>();
 
         while(cur.moveToNext())
         {
             String levelId = "Level " + cur.getInt(0);
+
+            int active = cur.getInt(cur.getColumnIndex("is_level_active"));
+            boolean isLevelActive = (active != 0);
+            active_list.add(isLevelActive);
+
+
             list.add(levelId);
             System.out.println("Dodano nowy element do listy");
 
         }
 
         //instantiate custom adapter
-        CustomList adapter = new CustomList(list, this);
+        CustomList adapter = new CustomList(list, active_list, this);
 
         //handle listview and assign adapter
         ListView lView = (ListView) findViewById(R.id.list);

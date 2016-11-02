@@ -133,7 +133,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public Cursor giveAllLevels()
     {
-        String[] columns = {"id", "photos_or_videos"};
+        String[] columns = {"id", "photos_or_videos", "is_level_active"};
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("levels", columns,null, null, null, null, null);
 

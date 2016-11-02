@@ -25,6 +25,9 @@ public class Level {
 
     public Level(Cursor cur, Cursor cur2){
 
+        photosOrVideosList = new ArrayList<Integer>();
+        emotions = new ArrayList<Integer>();
+
         while(cur.moveToNext())
         {
             id = cur.getInt(cur.getColumnIndex("id"));
