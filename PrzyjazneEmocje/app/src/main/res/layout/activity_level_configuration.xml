@@ -10,14 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="pg.autyzm.przyjazneemocje.LevelConfiguration">
 
-    <TextView
-        android:id="@+id/photos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
 
     <!--<Button-->
     <!--android:layout_width="wrap_content"-->
@@ -29,25 +21,128 @@
     <!--android:layout_toStartOf="@+id/spinner2"-->
     <!--android:layout_marginBottom="21dp" />-->
 
-    <ImageButton
-        android:id="@+id/levelButton"
-        android:layout_width="80dip"
-        android:layout_height="80dip"
-        android:layout_alignParentBottom="true"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/label_level_name"
+            android:text="@string/label_level_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/level_name"
+            android:text="@string/level_name"
+            android:inputType="text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@null"
-        android:onClick="addLevel"
-        android:scaleType="fitXY"
-        android:src="@drawable/icon_save" />
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_limit" />
+
+            <EditText
+                android:id="@+id/time_limit"
+                android:layout_width="162dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:text="60" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/pv_per_level" />
+
+            <EditText
+                android:id="@+id/pv_per_level"
+                android:layout_width="161dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text="3" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/levelButton"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="167dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/button_choose_images"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:text="@string/label_choose_images" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/imagesCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:text="@string/default_message" />
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:entries="@array/spinner" />
 
     <LinearLayout
         android:id="@+id/choose_emo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@id/choose_emo"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -88,97 +183,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_limit" />
-
-            <EditText
-                android:id="@+id/time_limit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number"
-                android:text="60" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/pv_per_level" />
-
-            <EditText
-                android:id="@+id/pv_per_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number"
-                android:maxLength="5"
-                android:text="3" />
-        </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/levelButton"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:background="@null"
+        android:onClick="addLevel"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_save" />
+    <ImageButton
+        android:id="@+id/exitButton"
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:background="@null"
+        android:onClick="closee"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_exit_purple" />
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/levelButton"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/button_choose_images"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_choose_images" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/imagesCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner"
-            android:text="@string/default_message" />
-    </LinearLayout>
-
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:entries="@array/spinner"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

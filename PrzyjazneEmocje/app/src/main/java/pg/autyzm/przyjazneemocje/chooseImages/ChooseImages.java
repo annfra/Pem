@@ -76,6 +76,12 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
                     sqlm.addPhoto(resID, "angry");
                 else if (emotName.contains("surprised"))
                     sqlm.addPhoto(resID, "surprised");
+                else if (emotName.contains("bored"))
+                    sqlm.addPhoto(resID, "bored");
+                else if (emotName.contains("scared"))
+                    sqlm.addPhoto(resID, "scared");
+                else if (emotName.contains("sad"))
+                    sqlm.addPhoto(resID, "sad");
             } catch (Exception e) {
                 e.printStackTrace();
             }

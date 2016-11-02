@@ -8,6 +8,8 @@
     <string name="pv_per_level">Photos/Videos per level</string>
     <string name="time_limit">Time Limit</string>
     <string name="label_emotion">Learn emotions:</string>
+    <string name="level_name">New level</string>
+    <string name="label_level_name">Level name: </string>
 
     <string name="emotion_happy">happy</string>
     <string name="emotion_sad">sad</string>

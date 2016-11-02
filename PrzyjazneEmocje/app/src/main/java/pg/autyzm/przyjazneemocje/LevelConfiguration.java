@@ -46,7 +46,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
 
-        TextView textPhotos = (TextView) findViewById(R.id.photos);
+       // TextView textPhotos = (TextView) findViewById(R.id.photos);
 
         //this.deleteDatabase("friendly_emotions.db");
 
@@ -273,5 +273,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
             }
         }
 
+    }
+    public void closee(View view) {
+        finish();
     }
 }

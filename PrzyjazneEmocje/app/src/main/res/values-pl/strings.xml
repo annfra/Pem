@@ -8,6 +8,8 @@
     <string name="pv_per_level">Zdjęcia/filmy na poziom</string>
     <string name="time_limit">Limit czasu</string>
     <string name="label_emotion">Uczone emocje:</string>
+    <string name="level_name">Nowy poziom</string>
+    <string name="label_level_name">Nazwa poziomu: </string>
 
     <string name="emotion_happy">wesoły</string>
     <string name="emotion_sad">smutny</string>
