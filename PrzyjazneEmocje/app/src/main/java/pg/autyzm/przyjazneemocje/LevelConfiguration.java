@@ -3,6 +3,7 @@ package pg.autyzm.przyjazneemocje;
 import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera;
+import android.os.Handler;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,37 +44,11 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         System.out.println(value + " to zostalo przekazane do konfiguracji");
 
 
-
-
-
        // TextView textPhotos = (TextView) findViewById(R.id.photos);
 
         //this.deleteDatabase("friendly_emotions.db");
 
-        sqlm = new SqlliteManager(this);
-        /*sqlm.addPhoto("D:nagiefotki:asia.png", "gniew");
-        sqlm.addPhoto("D:nagiefotki:pawel.png", "smutek");
-        sqlm.addPhoto("D:nagiefotki:ania.png", "radosc");
-
-
-        //for(int i=0; i<9; i++)
-        //    sqlm.delete("photos",i);
-
-        Cursor cursor = sqlm.givePhotosWithEmotion("gniew");
-        while(cursor.moveToNext())
-        {
-            String path = cursor.getString(1);
-            textPhotos.setText(textPhotos.getText() + "\n" + path);
-        }*/
-
-        //na sztywno dodajemy?
-        sqlm.addEmotion("happy");
-        sqlm.addEmotion("sad");
-        sqlm.addEmotion("angry");
-        sqlm.addEmotion("scared");
-        sqlm.addEmotion("surprised");
-        sqlm.addEmotion("bored");
-
+        sqlm = new SqlliteManager(this,"przyjazneemocje");
 
         Map<String, String> mapEmo = new ArrayMap<>();
         mapEmo.put("happy",getResources().getString(R.string.emotion_happy));
@@ -207,6 +182,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
     public void addLevel(View view) {
+
         System.out.println("addLevel");
 
         Level l = new Level();
@@ -239,6 +215,14 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         sqlm.addLevel(l);
+
+        final TextView msg = (TextView)findViewById(R.id.saveMessage);
+        msg.setVisibility(View.VISIBLE);
+        msg.postDelayed(new Runnable() {
+            public void run() {
+                msg.setVisibility(View.INVISIBLE);
+            }
+        }, 2000);
 
     }
 

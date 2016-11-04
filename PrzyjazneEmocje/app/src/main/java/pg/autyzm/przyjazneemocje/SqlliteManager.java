@@ -12,14 +12,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SqlliteManager extends SQLiteOpenHelper {
 
-    public SqlliteManager (Context context)
+
+    public SqlliteManager (final Context context, String databaseName)
     {
-        super(context, "friendly_emotions.db", null, 1);
+        super(new DatabaseContext(context), databaseName, null, 1);
     }
 
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text);" + "");
+        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
         db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, time_limit int, is_level_active boolean);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
@@ -40,12 +41,13 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.insertOrThrow("emotions", null, values);
     }
 
-    public void addPhoto(int path, String emotion)
+    public void addPhoto(int path, String emotion, String fileName)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("path",path);
         values.put("emotion",emotion);
+        values.put("name",fileName);
         db.insertOrThrow("photos", null, values);
     }
 
@@ -109,7 +111,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public Cursor givePhotosWithEmotion(String emotion)
     {
-        String[] columns = {"id", "path", "emotion"};
+        String[] columns = {"id", "path", "emotion", "name"};
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("photos", columns,"emotion like " + "'%" + emotion + "%'", null, null, null, null);
         return cursor;

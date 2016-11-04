@@ -4,6 +4,7 @@
     <string name="label_choose_images">Choose</string>
     <string name="title_choose_img">Choose photos</string>
     <string name="default_message">No photos selected</string>
+    <string name="save_message">Level saved</string>s
     <string name="select">select</string>
     <string name="pv_per_level">Photos/Videos per level</string>
     <string name="time_limit">Time Limit</string>

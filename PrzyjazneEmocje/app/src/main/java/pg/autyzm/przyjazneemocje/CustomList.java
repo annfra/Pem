@@ -33,7 +33,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         this.list = list;
         this.active_list = active_list;
         this.context = context;
-        sqlm = new SqlliteManager(context);
+        sqlm = new SqlliteManager(context,"przyjazneemocje");
     }
 
     @Override

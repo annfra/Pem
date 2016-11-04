@@ -63,29 +63,8 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
 
         setContentView(R.layout.choose_images);
 
-        SqlliteManager sqlm = new SqlliteManager(this);
-        sqlm.cleanTable("photos"); //TODO not clean and add, but only update
-        Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
-        for (Field f : drawables) {
-            try {
-                String emotName = f.getName();
-                int resID = getResources().getIdentifier(emotName, "drawable", getPackageName()); //zamiast resID po prostu od 0 iteracja
-                if (emotName.contains("happy"))
-                    sqlm.addPhoto(resID, "happy");
-                else if (emotName.contains("angry"))
-                    sqlm.addPhoto(resID, "angry");
-                else if (emotName.contains("surprised"))
-                    sqlm.addPhoto(resID, "surprised");
-                else if (emotName.contains("bored"))
-                    sqlm.addPhoto(resID, "bored");
-                else if (emotName.contains("scared"))
-                    sqlm.addPhoto(resID, "scared");
-                else if (emotName.contains("sad"))
-                    sqlm.addPhoto(resID, "sad");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        SqlliteManager sqlm = new SqlliteManager(this,"przyjazneemocje");
+        //stad wrzucilam do MainActivity
 
         Bundle bundle = getIntent().getExtras();
         emoInLanguage = bundle.getString("SpinnerValue");

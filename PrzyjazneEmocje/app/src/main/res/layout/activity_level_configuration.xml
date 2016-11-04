@@ -124,6 +124,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinner"
             android:text="@string/default_message" />
+        <TextView
+            android:id="@+id/saveMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:visibility="invisible"
+            android:text="@string/save_message" />
     </LinearLayout>
 
     <Spinner
