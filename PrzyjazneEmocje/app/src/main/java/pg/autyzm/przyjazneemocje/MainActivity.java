@@ -68,6 +68,7 @@ public class MainActivity extends Activity {
         sqlm.cleanTable("emotions");
         //na sztywno dodajemy?
         sqlm.addEmotion("happy");
+        System.out.println("Dodano emocje");
         sqlm.addEmotion("sad");
         sqlm.addEmotion("angry");
         sqlm.addEmotion("scared");
@@ -153,7 +154,11 @@ public class MainActivity extends Activity {
 
         while(cur.moveToNext())
         {
-            String levelId = "Level " + cur.getInt(0);
+
+            String name = cur.getString(cur.getColumnIndex("name"));
+
+            String levelId = cur.getInt(0) + " " + name;
+            //String levelId = "Level " + cur.getInt(0);
 
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
             boolean isLevelActive = (active != 0);

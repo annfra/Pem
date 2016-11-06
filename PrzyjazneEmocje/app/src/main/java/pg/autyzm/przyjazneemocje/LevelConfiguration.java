@@ -27,8 +27,10 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
     List<String> emotionsList = new ArrayList<String>();
+    List<Integer> emotionsIdsList = new ArrayList<Integer>();
     public SqlliteManager sqlm;
     int editedLevelId;
+    Level l;
 
     List<Integer> photosOrVideosList = new ArrayList<Integer>();
 
@@ -53,6 +55,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         Map<String, String> mapEmo = new ArrayMap<>();
         mapEmo.put("happy",getResources().getString(R.string.emotion_happy));
         mapEmo.put("sad",getResources().getString(R.string.emotion_sad));
+        System.out.println("Dodano emocje");
         mapEmo.put("angry",getResources().getString(R.string.emotion_angry));
         mapEmo.put("scared",getResources().getString(R.string.emotion_scared));
         mapEmo.put("surprised",getResources().getString(R.string.emotion_surprised));
@@ -62,7 +65,9 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         Cursor cur = sqlm.giveAllEmotions();
         while(cur.moveToNext())
         {
+
             String emotionId = "emotion" + cur.getInt(0);
+
             int resID = getResources().getIdentifier(emotionId, "id", getPackageName());
             if(resID == 0) break;
 
@@ -97,36 +102,86 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         // ladujemy do interfejsu wartosci z rekordu tabeli Level
         if(value > 0){
 
-            editedLevelId = value;
-
-            Cursor cur2 = sqlm.giveLevel(editedLevelId);
-            Cursor cur3 = sqlm.giveEmotionsInLevel(editedLevelId);
-
-            Level l = new Level(cur2, cur3);
-
-            EditText timeLimit = (EditText)findViewById(R.id.time_limit);
-            EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
-            Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
-
-
-
-            timeLimit.setText(Integer.toString(l.timeLimit));
-            vpPerLevel.setText(Integer.toString(l.pvPerLevel));
-
-
-            if(l.photosOrVideos.equals("Videos")){
-                photosOrVideos.setSelection(0);
-            }
-            else{
-                photosOrVideos.setSelection(1);
-            }
-
-            // Do zrobienia: zaladowac z Level.photosOrVideosList zdjecia do interfejsu
+            loadLevel(value);
 
         }
 
 
     }
+
+
+    void loadLevel(int value){
+
+
+        editedLevelId = value;
+
+        Cursor cur2 = sqlm.giveLevel(editedLevelId);
+        Cursor cur3 = sqlm.givePhotosInLevel(editedLevelId);
+        Cursor cur4 = sqlm.giveEmotionsInLevel(editedLevelId);
+
+        l = new Level(cur2, cur3, cur4);
+
+        EditText timeLimit = (EditText)findViewById(R.id.time_limit);
+        EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
+        EditText levelName  = (EditText)findViewById(R.id.level_name);
+        Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
+
+
+
+        timeLimit.setText(Integer.toString(l.timeLimit));
+        vpPerLevel.setText(Integer.toString(l.pvPerLevel));
+        levelName.setText(l.name);
+
+
+
+        if(l.photosOrVideos.equals("Videos")){
+            photosOrVideos.setSelection(0);
+        }
+        else{
+            photosOrVideos.setSelection(1);
+        }
+
+        // Do zrobienia: zaladowac z Level.photosOrVideosList zdjecia do interfejsu
+
+
+        for(int i : l.emotions){
+
+            int id = 0;
+
+            switch (i) {
+                case 1:
+                    id = R.id.emotion1;
+                    break;
+                case 2:
+                    id = R.id.emotion2;
+                    break;
+                case 3:
+                    id = R.id.emotion3;
+                    break;
+                case 4:
+                    id = R.id.emotion4;
+                    break;
+                case 5:
+                    id = R.id.emotion5;
+                    break;
+                case 6:
+                    id = R.id.emotion6;
+                    break;
+            }
+
+            CheckBox checkBox = (CheckBox)findViewById(id);
+            checkBox.setChecked(true);
+
+        }
+
+
+
+    }
+
+
+
+
+
     //jako glowna emocja pokazuje sie stara (mimo usuniecia), az do ponownego wyboru
     //trzeba cos zmienic w spinnerze?
     class myCheckBoxChnageClicker implements CheckBox.OnCheckedChangeListener
@@ -135,10 +190,25 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         @Override
         public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
         {
-            if(isChecked)
-                emotionsList.add(buttonView.getText().toString());
-            if(!isChecked)
-                emotionsList.remove(buttonView.getText().toString());
+
+            String emotionName = buttonView.getText().toString();
+
+            Cursor cc = sqlm.giveEmotionId(emotionName);
+            int emotionId = -1;
+
+            while(cc.moveToNext()){
+                System.out.println("Cos sie zadzialo");
+                emotionId = cc.getInt(cc.getColumnIndex("id"));
+            }
+
+            if(isChecked) {
+                emotionsList.add(emotionName);
+                emotionsIdsList.add(emotionId);
+            }
+            if(!isChecked) {
+                emotionsList.remove(emotionName);
+                emotionsIdsList.remove(emotionId);
+            }
 
             Spinner spinner = (Spinner)findViewById(R.id.spinner);
             updateEmotionsList(spinner, emotionsList);
@@ -183,7 +253,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
     public void addLevel(View view) {
 
-        System.out.println("addLevel");
+
 
         Level l = new Level();
 
@@ -195,16 +265,21 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         EditText timeLimit = (EditText)findViewById(R.id.time_limit);
+        EditText levelName = (EditText)findViewById(R.id.level_name);
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
 
         l.timeLimit = Integer.parseInt(timeLimit.getText() + "");
         l.pvPerLevel = Integer.parseInt(vpPerLevel.getText() + "");
+
+        l.name = levelName.getText().toString();
 
         if(editedLevelId > 0){
             l.id = editedLevelId;
         }
 
 
+        l.photosOrVideosList = photosOrVideosList;
+        l.emotions = emotionsIdsList;
 
         /*
 
@@ -233,6 +308,15 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                 Spinner spinner = (Spinner)findViewById(R.id.spinner);
                 Bundle bundle = new Bundle();
                 bundle.putString("SpinnerValue",spinner.getSelectedItem().toString());      //TODO gdy mamy zaznaczone wszystkie i jedno się odznaczy to przesyła ostatnio zaznaczoną emocję
+
+                // Birgiel. Dodanie emocji wybranych, gdy lvl byl tworzony
+
+                if(l != null) {
+                    ArrayList<Integer> list = (ArrayList<Integer>) l.photosOrVideosList;
+                    bundle.putIntegerArrayList("selected_photos", list);
+                }
+                //
+
                 Intent i = new Intent(this,ChooseImages.class);
                 i.putExtras(bundle);
                 startActivityForResult(i,1);

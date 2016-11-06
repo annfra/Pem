@@ -133,7 +133,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                 //
 
-                Level l = new Level(cur, null);
+                Level l = new Level(cur, null, null);
 
 
                 l.isLevelActive = ! l.isLevelActive;
@@ -169,7 +169,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                 //
 
-                Level l = new Level(cur, null);
+                Level l = new Level(cur, null, null);
 
 
                 l.isLevelActive = ! l.isLevelActive;
@@ -196,7 +196,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
 
         String[] splittedLevelString = levelString.split(" ");
-        int levelId = Integer.parseInt(splittedLevelString[1]);
+        int levelId = Integer.parseInt(splittedLevelString[0]);
 
 
         return levelId;
