@@ -2,12 +2,14 @@ package pg.autyzm.graprzyjazneemocje;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
 
     @Override
@@ -63,6 +65,7 @@ public class MainActivity extends Activity {
 
                     ImageView image = new ImageView(MainActivity.this);
                     image.setLayoutParams(lp);
+                    image.setOnClickListener(this);
                     Bitmap captureBmp = Media.getBitmap(getContentResolver(), Uri.fromFile(fileOut));
                     image.setImageBitmap(captureBmp);
                     linearLayout1.addView(image);
@@ -93,4 +96,11 @@ public class MainActivity extends Activity {
 
         return photosList;
     }
+
+
+        public void onClick(View v) {
+            Intent i = new Intent(this, AnimationActivity.class);
+            startActivity(i);
+
+        }
 }

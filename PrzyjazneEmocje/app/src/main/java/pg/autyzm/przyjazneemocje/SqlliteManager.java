@@ -15,7 +15,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public SqlliteManager (final Context context, String databaseName)
     {
-        super(new DatabaseContext(context), databaseName, null, 1);
+        super(new DatabaseContext(context), databaseName, null, 2);
     }
 
     public void onCreate(SQLiteDatabase db)
