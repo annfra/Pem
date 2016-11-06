@@ -46,8 +46,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         sqlm.getReadableDatabase();
 
-        int lvl = 0;
-        int photosPerLvL = 3;
+        // Birgiel
+
+        Cursor cur0 = sqlm.giveAllLevels();
+        int levelId = 0;
+        int photosPerLvL = 0;
+        Level l = null;
+
+        System.out.println(cur0.getCount());
+
+        while(cur0.moveToNext())
+        {
+            levelId = cur0.getInt(cur0.getColumnIndex("id"));
+
+            Cursor cur2 = sqlm.giveLevel(levelId);
+            Cursor cur3 = sqlm.givePhotosInLevel(levelId);
+            Cursor cur4 = sqlm.giveEmotionsInLevel(levelId);
+
+            l = new Level(cur2, cur3, cur4);
+
+            photosPerLvL = l.pvPerLevel;
+            System.out.println(">>>" + photosPerLvL);
+
+        }
+
+
+
+
+        // /birgiel
 
         List<String> photosList = new ArrayList<String>();
         Cursor cur = sqlm.givePhotosWithEmotion("happy");

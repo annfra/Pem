@@ -17,13 +17,15 @@ public class Level {
     int pvPerLevel;
     boolean isLevelActive;
 
+    String name;
+
     List<Integer> photosOrVideosList;
     List<Integer> emotions;
 
 
 
 
-    public Level(Cursor cur, Cursor cur2){
+    public Level(Cursor cur, Cursor cur2, Cursor cur3){
 
         photosOrVideosList = new ArrayList<Integer>();
         emotions = new ArrayList<Integer>();
@@ -37,22 +39,31 @@ public class Level {
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
 
             isLevelActive = (active != 0);
-
+            name = cur.getString(cur.getColumnIndex("name"));
         }
 
         if(cur2 != null){
 
             while(cur2.moveToNext()){
+                System.out.println("Cos sie zadzialo");
+                photosOrVideosList.add(cur2.getInt(cur2.getColumnIndex("photoid")));
 
-                photosOrVideosList.add(cur.getInt(cur.getColumnIndex("photoid")));
+            }
+        }
+
+        if(cur3 != null){
+
+            System.out.println("+++");
+
+            while(cur3.moveToNext()){
+
+                emotions.add(cur3.getInt(cur3.getColumnIndex("emotionid")));
+                System.out.println("+++++" + cur3.getInt(cur3.getColumnIndex("emotionid")));
 
             }
         }
 
     }
-
-
-
 
 
     public Level(){

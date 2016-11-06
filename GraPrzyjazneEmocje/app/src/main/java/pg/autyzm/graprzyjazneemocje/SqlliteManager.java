@@ -35,11 +35,20 @@ public class SqlliteManager extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor giveEmotionsInLevel(int levelId)
+    public Cursor givePhotosInLevel(int levelId)
     {
         String[] columns = {"id", "levelid", "photoid"};
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("levels_photos", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
+        return cursor;
+    }
+
+
+    public Cursor giveEmotionsInLevel(int levelId)
+    {
+        String[] columns = {"id", "levelid", "emotionid"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("levels_emotions", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
         return cursor;
     }
 
