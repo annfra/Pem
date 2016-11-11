@@ -36,16 +36,12 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
     private RowBean[] tabPhotos;
     private TextView textView;
     private String emoInLanguage;
+    private ArrayList<Integer> listSelectedPhotos;
 
     public void saveImagesToList(View view) {
-        String out = "";
-        for (RowBean el : tabPhotos) {
-            if (el.selected) {
-                out += el.icon + ";";
-            }
-        }
+
         Bundle bundle = new Bundle();
-        bundle.putString("choosenImages", out);
+        bundle.putIntegerArrayList("selected_photos", listSelectedPhotos);
         Intent returnIntent = new Intent();
         returnIntent.putExtras(bundle);
         setResult(RESULT_OK, returnIntent);
@@ -63,25 +59,23 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
 
         setContentView(R.layout.choose_images);
 
-        SqlliteManager sqlm = new SqlliteManager(this,"przyjazneemocje");
-        //stad wrzucilam do MainActivity
+        SqlliteManager sqlm = new SqlliteManager(this, "przyjazneemocje");
 
         Bundle bundle = getIntent().getExtras();
         emoInLanguage = bundle.getString("SpinnerValue");
 
         Map<String, String> mapEmo = new ArrayMap<>();
-        mapEmo.put(getResources().getString(R.string.emotion_happy),"happy");
-        mapEmo.put(getResources().getString(R.string.emotion_sad),"sad");
-        mapEmo.put(getResources().getString(R.string.emotion_angry),"angry");
-        mapEmo.put(getResources().getString(R.string.emotion_scared),"scared");
-        mapEmo.put(getResources().getString(R.string.emotion_surprised),"surprised");
-        mapEmo.put(getResources().getString(R.string.emotion_bored),"bored");
+        mapEmo.put(getResources().getString(R.string.emotion_happy), "happy");
+        mapEmo.put(getResources().getString(R.string.emotion_sad), "sad");
+        mapEmo.put(getResources().getString(R.string.emotion_angry), "angry");
+        mapEmo.put(getResources().getString(R.string.emotion_scared), "scared");
+        mapEmo.put(getResources().getString(R.string.emotion_surprised), "surprised");
+        mapEmo.put(getResources().getString(R.string.emotion_bored), "bored");
 
         choosenEmotion = mapEmo.get(emoInLanguage);
 
         textView = (TextView) findViewById(R.id.TextViewChoose);
         String str = getResources().getString(R.string.select);
-        textView.setText(emoInLanguage + " " + str + ": 0");
 
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
         int n = cursor.getCount();
@@ -90,9 +84,31 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
             tabPhotos[--n] = (new RowBean(cursor.getInt(1), false));
         }
 
+        //wybrane wczesniej
+        listSelectedPhotos = bundle.getIntegerArrayList("selected_photos");
+        for (int selected : listSelectedPhotos) {
+            for (RowBean el : tabPhotos) {
+                if (el.getIcon() == selected) {
+                    el.setSelected(true);
+                }
+            }
+        }
+
+        textView.setText(emoInLanguage + " " + str + ": " + countSelectedPhotos());
+
         RowAdapter adapter = new RowAdapter(this, R.layout.item, tabPhotos);
         listView = (ListView) findViewById(R.id.image_list);
         listView.setAdapter(adapter);
+    }
+
+    private int countSelectedPhotos() {
+        int numberOfPhotos = 0;
+        for (RowBean el : tabPhotos) {
+            if (el.selected) {
+                numberOfPhotos++;
+            }
+        }
+        return numberOfPhotos;
     }
 
     @Override
@@ -102,19 +118,16 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
             if (pos != ListView.INVALID_POSITION) {
                 if (isChecked) {
                     tabPhotos[pos].setSelected(true);
+                    listSelectedPhotos.add(tabPhotos[pos].getIcon());
                 } else {
                     tabPhotos[pos].setSelected(false);
+                     listSelectedPhotos.remove((Object)tabPhotos[pos].getIcon());
                 }
             }
-            int numberOfPhotos = 0;
-            for (RowBean el : tabPhotos) {
-                if (el.selected) {
-                    numberOfPhotos++;
-                }
-            }
+
             String str = getResources().getString(R.string.select);
-            textView.setText(emoInLanguage + " " + str + ": " + numberOfPhotos);
-        } catch ( Exception e ){
+            textView.setText(emoInLanguage + " " + str + ": " + countSelectedPhotos());
+        } catch ( Exception e ) {
             e.printStackTrace();
         }
 

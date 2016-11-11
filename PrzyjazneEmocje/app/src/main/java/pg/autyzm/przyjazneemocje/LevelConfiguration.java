@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera;
 import android.os.Handler;
-import android.support.v4.util.ArrayMap;
+import android.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +32,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     int editedLevelId;
     Level l;
 
-    List<Integer> photosOrVideosList = new ArrayList<Integer>();
+    ArrayList<Integer> photosOrVideosList = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,23 +125,24 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
         EditText levelName  = (EditText)findViewById(R.id.level_name);
         Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
+        TextView tv = (TextView) findViewById(R.id.imagesCount);
 
 
 
         timeLimit.setText(Integer.toString(l.timeLimit));
         vpPerLevel.setText(Integer.toString(l.pvPerLevel));
         levelName.setText(l.name);
+        String str = getResources().getString(R.string.select);
+        tv.setText(str + ": " + l.photosOrVideosList.size());
 
 
 
         if(l.photosOrVideos.equals("Videos")){
-            photosOrVideos.setSelection(0);
-        }
-        else{
             photosOrVideos.setSelection(1);
         }
-
-        // Do zrobienia: zaladowac z Level.photosOrVideosList zdjecia do interfejsu
+        else{
+            photosOrVideos.setSelection(0);
+        }
 
 
         for(int i : l.emotions){
@@ -191,7 +192,18 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
         {
 
-            String emotionName = buttonView.getText().toString();
+            String emotionNameInLanguage = buttonView.getText().toString();
+
+            Map<String, String> mapEmo = new android.util.ArrayMap<>();
+            mapEmo.put(getResources().getString(R.string.emotion_happy),"happy");
+            mapEmo.put(getResources().getString(R.string.emotion_sad),"sad");
+            mapEmo.put(getResources().getString(R.string.emotion_angry),"angry");
+            mapEmo.put(getResources().getString(R.string.emotion_scared),"scared");
+            mapEmo.put(getResources().getString(R.string.emotion_surprised),"surprised");
+            mapEmo.put(getResources().getString(R.string.emotion_bored),"bored");
+
+            String emotionName = mapEmo.get(emotionNameInLanguage);
+
 
             Cursor cc = sqlm.giveEmotionId(emotionName);
             int emotionId = -1;
@@ -202,11 +214,11 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
             }
 
             if(isChecked) {
-                emotionsList.add(emotionName);
+                emotionsList.add(emotionNameInLanguage);
                 emotionsIdsList.add(emotionId);
             }
             if(!isChecked) {
-                emotionsList.remove(emotionName);
+                emotionsList.remove(emotionNameInLanguage);
                 emotionsIdsList.remove(emotionId);
             }
 
@@ -316,6 +328,9 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                     bundle.putIntegerArrayList("selected_photos", list);
                 }
                 //
+                else {
+                    bundle.putIntegerArrayList("selected_photos", photosOrVideosList);
+                }
 
                 Intent i = new Intent(this,ChooseImages.class);
                 i.putExtras(bundle);
@@ -328,13 +343,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         String choosenImg="";
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                //zdjęcia w Stringu rozdzielone ;
                 Bundle bundle = data.getExtras();
-                choosenImg = bundle.getString("choosenImages");
-                String[] spilt =choosenImg.split(";");
-                for(String r:spilt){
-                    photosOrVideosList.add(Integer.parseInt(r));
-                }
+                photosOrVideosList = bundle.getIntegerArrayList("selected_photos");
                 TextView tv = (TextView) findViewById(R.id.imagesCount);
                 String str = getResources().getString(R.string.select);
                 tv.setText(str + ": " + photosOrVideosList.size());
