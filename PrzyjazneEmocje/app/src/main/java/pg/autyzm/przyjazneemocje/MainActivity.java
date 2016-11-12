@@ -68,7 +68,6 @@ public class MainActivity extends Activity {
         sqlm.cleanTable("emotions");
         //na sztywno dodajemy?
         sqlm.addEmotion("happy");
-        System.out.println("Dodano emocje");
         sqlm.addEmotion("sad");
         sqlm.addEmotion("angry");
         sqlm.addEmotion("scared");

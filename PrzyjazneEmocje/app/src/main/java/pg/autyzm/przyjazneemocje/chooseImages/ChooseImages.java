@@ -119,6 +119,7 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
                 if (isChecked) {
                     tabPhotos[pos].setSelected(true);
                     listSelectedPhotos.add(tabPhotos[pos].getIcon());
+                    System.out.println("To trafia do tablicy z idkami photos " + tabPhotos[pos].getIcon());
                 } else {
                     tabPhotos[pos].setSelected(false);
                      listSelectedPhotos.remove((Object)tabPhotos[pos].getIcon());

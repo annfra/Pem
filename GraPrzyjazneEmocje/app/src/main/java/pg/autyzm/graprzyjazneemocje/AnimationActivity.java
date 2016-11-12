@@ -32,8 +32,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     @Override

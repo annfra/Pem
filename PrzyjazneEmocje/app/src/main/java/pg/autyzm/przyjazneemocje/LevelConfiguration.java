@@ -209,16 +209,17 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
             int emotionId = -1;
 
             while(cc.moveToNext()){
-                System.out.println("Cos sie zadzialo");
                 emotionId = cc.getInt(cc.getColumnIndex("id"));
             }
 
             if(isChecked) {
                 emotionsList.add(emotionNameInLanguage);
+                System.out.println(">>>" + emotionId);
                 emotionsIdsList.add(emotionId);
             }
             if(!isChecked) {
                 emotionsList.remove(emotionNameInLanguage);
+                System.out.println(">>>" + emotionId);
                 emotionsIdsList.remove(emotionId);
             }
 
@@ -290,15 +291,25 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         }
 
 
-        l.photosOrVideosList = photosOrVideosList;
+        //l.photosOrVideosList = photosOrVideosList;
+
+        // przerabiamy te dlugie id na krotkie
+
+        for(Integer photoPath : photosOrVideosList){
+
+            Cursor pp = sqlm.givePhotoWithPath(Integer.toString(photoPath));
+            pp.moveToFirst();
+            int realId = pp.getInt(pp.getColumnIndex("id"));
+            l.photosOrVideosList.add(realId);
+
+        }
+
+
+
+
+
         l.emotions = emotionsIdsList;
 
-        /*
-
-            Do zrobienia: tutaj trzeba zrobić rozpoznanie, które zdjęcia zostały zaznaczone w interfejsie, a następnie
-             ich podpiecie do pola photosOrVideosList w obiektcie Level, by potem zapisac to do bazy
-
-         */
 
 
         sqlm.addLevel(l);
@@ -315,21 +326,36 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.button_choose_images:
-                Spinner spinner = (Spinner)findViewById(R.id.spinner);
+                Spinner spinner = (Spinner) findViewById(R.id.spinner);
                 Bundle bundle = new Bundle();
-                bundle.putString("SpinnerValue",spinner.getSelectedItem().toString());      //TODO gdy mamy zaznaczone wszystkie i jedno się odznaczy to przesyła ostatnio zaznaczoną emocję
+                bundle.putString("SpinnerValue", spinner.getSelectedItem().toString());      //TODO gdy mamy zaznaczone wszystkie i jedno się odznaczy to przesyła ostatnio zaznaczoną emocję
 
                 // Birgiel. Dodanie emocji wybranych, gdy lvl byl tworzony
 
+                // przerabiamy krotkie id na dlugie (path)
+
+                ArrayList<Integer> list = new ArrayList<Integer>();
+
+                if (l != null){
+
+                    for (Integer photoPath : l.photosOrVideosList) {
+
+                        Cursor pp = sqlm.givePhotoWithId(photoPath);
+                        pp.moveToFirst();
+                        int path = pp.getInt(pp.getColumnIndex("path"));
+                        list.add(path);
+
+                    }
+                }
+
                 if(l != null) {
-                    ArrayList<Integer> list = (ArrayList<Integer>) l.photosOrVideosList;
                     bundle.putIntegerArrayList("selected_photos", list);
                 }
                 //
                 else {
-                    bundle.putIntegerArrayList("selected_photos", photosOrVideosList);
+                    bundle.putIntegerArrayList("selected_photos", list);
                 }
 
                 Intent i = new Intent(this,ChooseImages.class);
@@ -344,7 +370,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                photosOrVideosList = bundle.getIntegerArrayList("selected_photos");
+                photosOrVideosList.addAll(bundle.getIntegerArrayList("selected_photos"));
                 TextView tv = (TextView) findViewById(R.id.imagesCount);
                 String str = getResources().getString(R.string.select);
                 tv.setText(str + ": " + photosOrVideosList.size());

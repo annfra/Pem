@@ -45,7 +45,6 @@ public class Level {
         if(cur2 != null){
 
             while(cur2.moveToNext()){
-                System.out.println("Cos sie zadzialo");
                 photosOrVideosList.add(cur2.getInt(cur2.getColumnIndex("photoid")));
 
             }

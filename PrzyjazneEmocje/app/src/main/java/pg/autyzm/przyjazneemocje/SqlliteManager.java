@@ -43,6 +43,8 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void addPhoto(int path, String emotion, String fileName)
     {
+
+        //System.out.println("path " + path);
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("path",path);
@@ -87,11 +89,21 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
 
         System.out.println("addLevel");
+        /*
+        wyswietlenie co jest w obiekcie level przed jego zapisaniem do bazy danych
+
+         */
+        System.out.println("Level name " + level.name);
+        System.out.println("Is level active " + level.isLevelActive);
+        System.out.println("Time limit " + level.timeLimit);
+        System.out.println("Photos per level " + level.pvPerLevel);
+        System.out.println("Photos or videos " + level.photosOrVideos);
+
 
         for(Integer photoOrVideo : level.photosOrVideosList){
 
 
-            System.out.println("^^" + photoOrVideo);
+            System.out.println("Photo id " + photoOrVideo);
 
             values = new ContentValues();
             values.put("levelid",level.id);
@@ -103,7 +115,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         for(Integer emotion : level.emotions){
 
 
-            System.out.println("^^" + emotion);
+            System.out.println("Emotion id " + emotion);
 
             values = new ContentValues();
             values.put("levelid",level.id);
@@ -137,6 +149,22 @@ public class SqlliteManager extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor givePhotoWithPath(String path)
+    {
+        String[] columns = {"id", "path", "emotion", "name"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("photos", columns,"path like " + "'%" + path + "%'", null, null, null, null);
+        return cursor;
+    }
+
+    public Cursor givePhotoWithId(int id)
+    {
+        String[] columns = {"id", "path", "emotion", "name"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("photos", columns,"id like " + "'%" + id + "%'", null, null, null, null);
+        return cursor;
+    }
+
     public Cursor givePhotosInLevel(int levelId)
     {
         String[] columns = {"id", "levelid", "photoid"};
@@ -164,7 +192,14 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     }
 
+    public Cursor giveEmotionName(int id){
 
+        String[] columns = {"id", "emotion"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("emotions", columns,"id like " + "'%" + id + "%'", null, null, null, null);
+        return cursor;
+
+    }
 
     public Cursor giveAllEmotions()
     {
