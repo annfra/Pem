@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -34,6 +37,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String goodAnswer;
     Cursor cur0;
     SqlliteManager sqlm;
+    int wrongAnswers;
+    int rightAnswers;
 
 
     @Override
@@ -47,7 +52,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
 
-        TextView txt = (TextView) findViewById(R.id.txt);
+
 
         sqlm = new SqlliteManager(this, "przyjazneemocje");
 
@@ -160,10 +165,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     void generateView(List<String> photosList){
 
 
+        TextView txt = (TextView) findViewById(R.id.rightEmotion);
+        txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
+        txt.setTextColor(Color.parseColor("#00802b"));
+        String rightEm = goodAnswer.replaceAll("[0-9.]", "");//=sqlm.giveNameOfEmotionFromPhoto(goodAnswer);
+        txt.setText("Pokaż gdzie " + rightEm); //getResources().getString(R.string."emotion_" + goodEm) zeby bylo jezykowo ok
 
-        //List<String> photosList = new ArrayList<String>();
-        //Cursor cur = sqlm.givePhotosWithEmotion("happy");
-        //photosList = giveRandomPhotosFromTable(cur, photosPerLvL);
 
         LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.imageGallery);
 
@@ -202,27 +209,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public List<String> giveRandomPhotosFromTable(Cursor cur, int howMany)
-    {
-        String[] tmp = new String[cur.getCount()];
-        int i = 0;
-        while(cur.moveToNext())
-        {
-            String name = cur.getString(3);
-            tmp[i++] = name;
-        }
-        List<String> photosList = new ArrayList<String>();
-
-        for(int j=0; j<howMany; j++)
-        {
-            Random rand = new Random();
-            int k = rand.nextInt(i);
-            photosList.add(tmp[k]);
-        }
-
-        return photosList;
-    }
-
 
     public void onClick(View v) {
 
@@ -233,15 +219,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(v.getId() == 1) {
             Intent i = new Intent(this, AnimationActivity.class);
             startActivity(i);
-
+            rightAnswers++;
 
             if(cur0.moveToNext()){
                 loadLevel();
             }else{
                 System.out.println("Skonczyly sie poziomy");
+                Intent in = new Intent(this, EndActivity.class);
+                in.putExtra("WRONG", wrongAnswers);
+                in.putExtra("RIGHT", rightAnswers);
+                startActivity(in);
+
             }
 
 
+        }
+        else //jesli nie wybrano wlasciwej
+        {
+            wrongAnswers++;
         }
 
 

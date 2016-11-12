@@ -100,6 +100,20 @@ public class SqlliteManager extends SQLiteOpenHelper {
     }
 
 
+    public String giveNameOfEmotionFromPhoto(String nameOfPhoto)
+    {
+        String[] columns = {"id", "path", "emotion", "name"};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("photos", columns,null, null, null, null, null);
+        while(cursor.moveToNext()) {
+            String name = cursor.getString(3);
+            if(name.equals(nameOfPhoto))
+                return cursor.getString(2);
+        }
+        return "Fail";
+    }
+
+
 
 
 }

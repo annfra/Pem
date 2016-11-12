@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AnimationActivity"/>
+        <activity android:name=".EndActivity"/>
     </application>
 
 </manifest>
