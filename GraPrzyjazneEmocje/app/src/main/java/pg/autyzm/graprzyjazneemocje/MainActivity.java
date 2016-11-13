@@ -166,9 +166,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         TextView txt = (TextView) findViewById(R.id.rightEmotion);
         txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
-        String rightEm = goodAnswer.replace(".jpg","").replaceAll("[0-9.]", "");//=sqlm.giveNameOfEmotionFromPhoto(goodAnswer);
-        txt.setText("Pokaż gdzie " + rightEm); //getResources().getString(R.string."emotion_" + goodEm) zeby bylo jezykowo ok
-
+        String rightEm = goodAnswer.replace(".jpg","").replaceAll("[0-9.]", "");
+        String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEm, "string", getPackageName()));
+        txt.setText(getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang);
 
         LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.imageGallery);
 
