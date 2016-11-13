@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
@@ -167,8 +166,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         TextView txt = (TextView) findViewById(R.id.rightEmotion);
         txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
-        txt.setTextColor(Color.parseColor("#00802b"));
-        String rightEm = goodAnswer.replaceAll("[0-9.]", "");//=sqlm.giveNameOfEmotionFromPhoto(goodAnswer);
+        String rightEm = goodAnswer.replace(".jpg","").replaceAll("[0-9.]", "");//=sqlm.giveNameOfEmotionFromPhoto(goodAnswer);
         txt.setText("Pokaż gdzie " + rightEm); //getResources().getString(R.string."emotion_" + goodEm) zeby bylo jezykowo ok
 
 
@@ -183,8 +181,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for(String photoName:photosList)
         {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
-            File fileOut = new File(root + "Emotions" + File.separator + photoName +".jpg");
-            System.out.println(root + "Emotions" + File.separator + photoName +".jpg");
+            File fileOut = new File(root + "Emotions" + File.separator + photoName);
+            System.out.println(root + "Emotions" + File.separator + photoName);
             try {
 
                 ImageView image = new ImageView(MainActivity.this);

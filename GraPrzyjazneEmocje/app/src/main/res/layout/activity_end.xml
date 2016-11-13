@@ -15,24 +15,27 @@
         android:id="@+id/endTextMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textColor="@color/score"
         android:gravity="center_horizontal"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/endTextMain" >
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+>
         <TextView
             android:id="@+id/rightAnswers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal" />
+            android:textColor="@color/score"/>
 
         <TextView
             android:id="@+id/wrongAnswers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_alignBottom="@+id/rightAnswers"/>
+            android:textColor="@color/score" />
 
     </LinearLayout>
 

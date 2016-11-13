@@ -1,7 +1,6 @@
 package pg.autyzm.graprzyjazneemocje;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ public class EndActivity extends Activity {
 
         TextView txt = (TextView) findViewById(R.id.endTextMain);
         txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
-        txt.setTextColor(Color.parseColor("#00802b"));
         txt.setText("Gratulacje!");
 
         Bundle extras = getIntent().getExtras();
