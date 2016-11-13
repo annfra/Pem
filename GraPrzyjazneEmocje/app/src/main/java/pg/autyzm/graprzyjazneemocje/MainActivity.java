@@ -60,13 +60,38 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // Birgiel
 
         cur0 = sqlm.giveAllLevels();
-        cur0.moveToFirst();
-        loadLevel();
+        findNextActiveLevel();
 
 
     }
 
-        void loadLevel(){
+
+        boolean findNextActiveLevel(){
+
+
+
+            while(cur0.moveToNext()){
+
+                if(! loadLevel()){
+                    continue;
+                }
+                else{
+                    return true;
+                }
+
+
+
+            }
+
+            return false;
+
+        }
+
+
+
+
+
+        boolean loadLevel(){
 
             System.out.println("---------------Nowy poziom-------------------");
 
@@ -88,6 +113,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             l = new Level(cur2, cur3, cur4);
 
             photosPerLvL = l.pvPerLevel;
+
+
+            if(! l.isLevelActive) return false;
+
 
 
             // nizej kod napisany 11.11.16
@@ -156,6 +185,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             System.out.println("Wygenerowano view");
 
 
+            return true;
 
         // /birgiel
 
@@ -219,15 +249,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             startActivity(i);
             rightAnswers++;
 
-            if(cur0.moveToNext()){
-                loadLevel();
-            }else{
+            if(! findNextActiveLevel()){
                 System.out.println("Skonczyly sie poziomy");
                 Intent in = new Intent(this, EndActivity.class);
                 in.putExtra("WRONG", wrongAnswers);
                 in.putExtra("RIGHT", rightAnswers);
                 startActivity(in);
-
             }
 
 

@@ -35,24 +35,16 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp" />
 
-    <Button
-        android:id="@+id/active_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/edit_btn"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:text="Active" />
 
     <CheckBox
         android:id="@+id/active_chck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="33dp"
+        android:layout_marginRight="41dp"
         android:text="Active"
-        android:layout_marginEnd="33dp"
-        android:layout_alignBottom="@+id/active_btn"
-        android:layout_toLeftOf="@+id/active_btn"
-        android:layout_toStartOf="@+id/active_btn" />
+        android:layout_marginEnd="41dp"
+        android:layout_alignBottom="@+id/edit_btn"
+        android:layout_toLeftOf="@+id/edit_btn"
+        android:layout_toStartOf="@+id/edit_btn" />
 
 </RelativeLayout>

@@ -291,6 +291,11 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         if(editedLevelId > 0){
             l.id = editedLevelId;
+
+
+            // po przekazaniu informacji, ze mamy juz jakies id (czyli jest to edycja i jakis rekord ma byc nadpisany), zerujemy id, na wypadek,
+            // gdyby user jeszcze raz wlaczyl zapisz - wtedy z braku id-ka uzna, ze to tworzenie nowego poziomu i stworzy nowy rekord
+            editedLevelId = 0;
         }
 
 

@@ -70,7 +70,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         //Handle buttons and add onClickListeners
         ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.delete_btn);
         ImageButton editBtn = (ImageButton)view.findViewById(R.id.edit_btn);
-        Button activeBtn = (Button)view.findViewById(R.id.active_btn);
+
         CheckBox activeChck = (CheckBox) view.findViewById(R.id.active_chck);
 
 
@@ -85,8 +85,9 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                 sqlm.delete("levels", "id", String.valueOf(findLevelId(position)));
                 sqlm.delete("levels_photos", "levelid", String.valueOf(findLevelId(position)));
-                list.remove(position); //or some other task
-
+                sqlm.delete("levels_emotions", "levelid", String.valueOf(findLevelId(position)));
+                list.remove(position);
+                active_list.remove(position);
 
                 notifyDataSetChanged();
             }
@@ -115,39 +116,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
             }
         });
 
-        activeBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
 
-                /*
-
-                    1. znajdz id poziomu
-                    2. pobierz poziom z bazy
-                    3. edytuj go
-                    4. zapisz go do bazy
-
-                    */
-
-                Cursor cur = sqlm.giveLevel(findLevelId(position));
-
-                //
-
-                Level l = new Level(cur, null, null);
-
-
-                l.isLevelActive = ! l.isLevelActive;
-
-
-                //
-
-                sqlm.addLevel(l);
-
-                notifyDataSetChanged();
-
-
-            }
-        });
 
 
 
@@ -165,11 +134,14 @@ public class CustomList extends BaseAdapter implements ListAdapter {
 
                     */
 
-                Cursor cur = sqlm.giveLevel(findLevelId(position));
 
-                //
 
-                Level l = new Level(cur, null, null);
+                Cursor cur2 = sqlm.giveLevel(findLevelId(position));
+                Cursor cur3 = sqlm.givePhotosInLevel(findLevelId(position));
+                Cursor cur4 = sqlm.giveEmotionsInLevel(findLevelId(position));
+
+                Level l = new Level(cur2, cur3, cur4);
+
 
 
                 l.isLevelActive = ! l.isLevelActive;
