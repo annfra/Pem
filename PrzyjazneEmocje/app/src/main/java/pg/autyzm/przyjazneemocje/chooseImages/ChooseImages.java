@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.SpannedString;
 import android.util.ArrayMap;
 import android.view.View;
@@ -78,6 +79,40 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
         String str = getResources().getString(R.string.select);
 
         Cursor cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
+
+        //tu dodaje
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+
+        String newFileName = "";
+        boolean finded = true;
+        String[] photosNameList = new File(root + "/Emotions").list();
+        if(cursor.getCount() < photosNameList.length)
+        {
+            for(String fileName : photosNameList)
+            {
+                String tmp = fileName.replace(".jpg","").replaceAll("[0-9]","");
+                if(tmp.equals(choosenEmotion))
+                {
+                    while(cursor.moveToNext())
+                    {
+                        if(cursor.getString(3) == fileName)
+                        {
+                            finded = true;
+                            break;
+                        }
+                        finded = false;
+                    }
+                    if(finded == false)
+                        sqlm.addPhoto(1,choosenEmotion,fileName);
+                }
+            }
+        }
+
+        cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
+
+
+        //
+
         int n = cursor.getCount();
         tabPhotos = new RowBean[n];
         while (cursor.moveToNext()) {

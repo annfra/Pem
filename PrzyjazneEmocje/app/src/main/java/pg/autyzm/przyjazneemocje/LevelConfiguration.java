@@ -95,6 +95,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         View buttonChoose = findViewById(R.id.button_choose_images);
         buttonChoose.setOnClickListener(this);
 
+        Button buttonCamera = (Button) findViewById(R.id.button_take_photo);
+        buttonCamera.setOnClickListener(this);
 
         //updateLevelList();
 
@@ -187,6 +189,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     //trzeba cos zmienic w spinnerze?
     class myCheckBoxChnageClicker implements CheckBox.OnCheckedChangeListener
     {
+
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
@@ -361,6 +364,14 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                 Intent i = new Intent(this,ChooseImages.class);
                 i.putExtras(bundle);
                 startActivityForResult(i,1);
+                break;
+            case R.id.button_take_photo:
+                Spinner spinner2 = (Spinner) findViewById(R.id.spinner);
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("SpinnerValue", spinner2.getSelectedItem().toString());
+                Intent in = new Intent(this, CameraActivity.class);
+                in.putExtras(bundle2);
+                startActivityForResult(in,1);
                 break;
         }
     }

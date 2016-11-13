@@ -26,6 +26,7 @@
             android:label="@string/title_choose_img"
             android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".LevelConfiguration"></activity>
+        <activity android:name=".CameraActivity"></activity>
     </application>
 
 </manifest>
