@@ -1,22 +1,20 @@
 package pg.autyzm.przyjazneemocje.chooseImages;
 
+import android.content.ContentResolver;
+
 /**
  * Created by Joanna on 2016-10-11.
  */
 
 public class RowBean {
 
-    int icon;
+
+    String photoName;
     boolean selected;
+    ContentResolver cr;
+    int id;
 
 
-    public int getIcon() {
-        return icon;
-    }
-
-    public void setIcon(int icon) {
-        this.icon = icon;
-    }
     public boolean isSelected() {
         return selected;
     }
@@ -25,13 +23,23 @@ public class RowBean {
         this.selected = selected;
     }
 
-    public RowBean(){
+    public int getId() {
+        return id;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
+
+    public RowBean() {
 
     }
 
-    public RowBean(int icon, boolean selected) {
-
-        this.icon = icon;
+    public RowBean(String photoName, int icon, boolean selected, ContentResolver cr, int id) {
+        this.photoName = photoName;
         this.selected = selected;
+        this.cr = cr;
+        this.id = id;
     }
 }

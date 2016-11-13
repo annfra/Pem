@@ -42,10 +42,12 @@ public class MainActivity extends AppCompatActivity {
         //generate list
 
         sqlm.cleanTable("photos"); //TODO not clean and add, but only update
-        Field[] drawables2 = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
-        for (Field f : drawables2) {
+
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+
+        for (String emotName : new File(root + "/Emotions").list()) {
+
             try {
-                String emotName = f.getName();
                 int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
                 if (emotName.contains("happy"))
                     sqlm.addPhoto(resID, "happy", emotName);
@@ -75,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         sqlm.addEmotion("surprised");
         sqlm.addEmotion("bored");
 
-        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
         File createDir = new File(root + "Emotions" + File.separator);
         if (!createDir.exists()) {
             createDir.mkdir();
@@ -118,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
         //Refresh your stuff here
 
         updateLevelList();
-
-
+        
     }
 
     public boolean IfConstainsEmotionName(String inputString)

@@ -81,14 +81,15 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
         int n = cursor.getCount();
         tabPhotos = new RowBean[n];
         while (cursor.moveToNext()) {
-            tabPhotos[--n] = (new RowBean(cursor.getInt(1), false));
+
+            tabPhotos[--n] = (new RowBean(cursor.getString(3),cursor.getInt(1), false, getContentResolver(), cursor.getInt(0)));
         }
 
         //wybrane wczesniej
         listSelectedPhotos = bundle.getIntegerArrayList("selected_photos");
         for (int selected : listSelectedPhotos) {
             for (RowBean el : tabPhotos) {
-                if (el.getIcon() == selected) {
+                if (el.getId() == selected) {
                     el.setSelected(true);
                 }
             }
@@ -118,11 +119,11 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
             if (pos != ListView.INVALID_POSITION) {
                 if (isChecked) {
                     tabPhotos[pos].setSelected(true);
-                    listSelectedPhotos.add(tabPhotos[pos].getIcon());
-                    System.out.println("To trafia do tablicy z idkami photos " + tabPhotos[pos].getIcon());
+                    listSelectedPhotos.add(tabPhotos[pos].getId());
+                    System.out.println("To trafia do tablicy z idkami photos " + tabPhotos[pos].getId());
                 } else {
                     tabPhotos[pos].setSelected(false);
-                     listSelectedPhotos.remove((Object)tabPhotos[pos].getIcon());
+                     listSelectedPhotos.remove((Object)tabPhotos[pos].getId());
                 }
             }
 

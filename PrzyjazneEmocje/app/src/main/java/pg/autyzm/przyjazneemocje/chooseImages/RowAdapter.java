@@ -2,6 +2,10 @@ package pg.autyzm.przyjazneemocje.chooseImages;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +14,10 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+
 
 import pg.autyzm.przyjazneemocje.R;
 
@@ -38,33 +45,37 @@ public class RowAdapter extends ArrayAdapter<RowBean> {
         View row = convertView;
         RowBeanHolder holder = null;
 
-        if(row == null)
-        {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        if (row == null) {
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
 
             holder = new RowBeanHolder();
-            holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
+            holder.imgIcon = (ImageView) row.findViewById(R.id.imgIcon);
             holder.checkBox = (CheckBox) row.findViewById(R.id.checkBoxImagesToChoose);
 
-            holder.checkBox.setOnCheckedChangeListener((ChooseImages)context);
+            holder.checkBox.setOnCheckedChangeListener((ChooseImages) context);
 
             row.setTag(holder);
-        }
-        else
-        {
-            holder = (RowBeanHolder)row.getTag();
+        } else {
+            holder = (RowBeanHolder) row.getTag();
         }
 
+
         RowBean object = data[position];
-        holder.imgIcon.setImageResource(object.icon);
         holder.checkBox.setChecked(object.selected);
+        try {
+            String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+            File fileOut = new File(root + "Emotions" + File.separator + object.photoName);
+            Bitmap captureBmp = MediaStore.Images.Media.getBitmap(object.cr, Uri.fromFile(fileOut));
+            holder.imgIcon.setImageBitmap(captureBmp);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         return row;
     }
 
-    static class RowBeanHolder
-    {
+    static class RowBeanHolder {
         public ImageView imgIcon;
         public CheckBox checkBox;
     }

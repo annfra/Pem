@@ -291,18 +291,18 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         }
 
 
-        //l.photosOrVideosList = photosOrVideosList;
+        l.photosOrVideosList = photosOrVideosList;
 
         // przerabiamy te dlugie id na krotkie
 
-        for(Integer photoPath : photosOrVideosList){
-
-            Cursor pp = sqlm.givePhotoWithPath(Integer.toString(photoPath));
-            pp.moveToFirst();
-            int realId = pp.getInt(pp.getColumnIndex("id"));
-            l.photosOrVideosList.add(realId);
-
-        }
+//        for(Integer photoPath : photosOrVideosList){
+//
+//            Cursor pp = sqlm.givePhotoWithPath(Integer.toString(photoPath));
+//            pp.moveToFirst();
+//            int realId = pp.getInt(pp.getColumnIndex("id"));
+//            l.photosOrVideosList.add(realId);
+//
+//        }
 
 
 
@@ -336,26 +336,26 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
                 // przerabiamy krotkie id na dlugie (path)
 
-                ArrayList<Integer> list = new ArrayList<Integer>();
+//                ArrayList<Integer> list = new ArrayList<Integer>();
 
-                if (l != null){
-
-                    for (Integer photoPath : l.photosOrVideosList) {
-
-                        Cursor pp = sqlm.givePhotoWithId(photoPath);
-                        pp.moveToFirst();
-                        int path = pp.getInt(pp.getColumnIndex("path"));
-                        list.add(path);
-
-                    }
-                }
-
+//                if (l != null){
+//
+//                    for (Integer photoPath : l.photosOrVideosList) {
+//
+//                        Cursor pp = sqlm.givePhotoWithId(photoPath);
+//                        pp.moveToFirst();
+//                        int path = pp.getInt(pp.getColumnIndex("path"));
+//                        list.add(path);
+//
+//                    }
+//                }
+//
                 if(l != null) {
-                    bundle.putIntegerArrayList("selected_photos", list);
+                    bundle.putIntegerArrayList("selected_photos", ( ArrayList<Integer>)l.photosOrVideosList);
                 }
                 //
                 else {
-                    bundle.putIntegerArrayList("selected_photos", list);
+                    bundle.putIntegerArrayList("selected_photos", photosOrVideosList);
                 }
 
                 Intent i = new Intent(this,ChooseImages.class);
