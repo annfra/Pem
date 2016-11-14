@@ -127,17 +127,17 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
         EditText levelName  = (EditText)findViewById(R.id.level_name);
         Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
-        TextView tv = (TextView) findViewById(R.id.imagesCount);
+//        TextView tv = (TextView) findViewById(R.id.imagesCount);
 
 
 
         timeLimit.setText(Integer.toString(l.timeLimit));
         vpPerLevel.setText(Integer.toString(l.pvPerLevel));
         levelName.setText(l.name);
-        String str = getResources().getString(R.string.select);
-        tv.setText(str + ": " + l.photosOrVideosList.size());
+//        String str = getResources().getString(R.string.select);
+//        tv.setText(str + ": " + l.photosOrVideosList.size());
 
-
+        updateListSize();
 
         if(l.photosOrVideos.equals("Videos")){
             photosOrVideos.setSelection(1);
@@ -223,16 +223,25 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
             if(!isChecked) {
                 emotionsList.remove(emotionNameInLanguage);
                 System.out.println(">>>" + emotionId);
-                emotionsIdsList.remove(emotionId);
+                emotionsIdsList.remove((Object)emotionId);
+                removeImgEmo(emotionName);
             }
 
             Spinner spinner = (Spinner)findViewById(R.id.spinner);
             updateEmotionsList(spinner, emotionsList);
+            updateListSize();
         }
     }
 
 
-
+    private void removeImgEmo(String emotion) {
+        Cursor cursor = sqlm.givePhotosWithEmotion(emotion);
+        while(cursor.moveToNext()) {
+            if (photosOrVideosList.contains(cursor.getInt(0))) {
+                photosOrVideosList.remove((Object) cursor.getInt(0));
+            }
+        }
+    }
 
 
     public static void updateEmotionsList(Spinner spinner, List<String> emotionsList)
@@ -380,6 +389,12 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
+
+    private void updateListSize(){
+        TextView tv = (TextView) findViewById(R.id.imagesCount);
+        String str = getResources().getString(R.string.select);
+        tv.setText(str + ": " + photosOrVideosList.size());
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String choosenImg="";
@@ -387,9 +402,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 photosOrVideosList.addAll(bundle.getIntegerArrayList("selected_photos"));
-                TextView tv = (TextView) findViewById(R.id.imagesCount);
-                String str = getResources().getString(R.string.select);
-                tv.setText(str + ": " + photosOrVideosList.size());
+                updateListSize();
             }
         }
 

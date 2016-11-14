@@ -119,7 +119,7 @@
                 android:id="@+id/button_take_photo"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
-                android:text="Take photo" />
+                android:text="@string/newPhoto" />
 
         </LinearLayout>
 
