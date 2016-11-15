@@ -32,6 +32,8 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     @Override
     public void onAnimationEnd(Animation animation) {
+        Intent resultIntent = new Intent();
+        setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 

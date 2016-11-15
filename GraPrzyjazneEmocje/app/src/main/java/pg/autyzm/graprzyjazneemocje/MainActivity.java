@@ -6,9 +6,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -39,7 +43,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     SqlliteManager sqlm;
     int wrongAnswers;
     int rightAnswers;
+    int timeout;
     String commandText;
+    boolean animationEnds = true;
 
 
     @Override
@@ -71,6 +77,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 speaker.speak(commandText);
             }
         });
+
+
 
     }
 
@@ -194,9 +202,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
             System.out.println("Wygenerowano view");
 
 
+            //timer?
+            if(animationEnds == true)
+                StartTimer(l);
+
+
             return true;
 
         // /birgiel
+
+
 
     }
 
@@ -245,6 +260,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 System.out.println("IO Exception " + photoName);
             }
         }
+
+
+
     }
 
 
@@ -255,8 +273,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         if(v.getId() == 1) {
+            animationEnds = false;
             Intent i = new Intent(this, AnimationActivity.class);
-            startActivity(i);
+            startActivityForResult(i, 1);
+            //startActivity(i);
             rightAnswers++;
 
             if(! findNextActiveLevel()){
@@ -264,6 +284,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent in = new Intent(this, EndActivity.class);
                 in.putExtra("WRONG", wrongAnswers);
                 in.putExtra("RIGHT", rightAnswers);
+                in.putExtra("TIMEOUT", timeout);
                 startActivity(in);
             }
 
@@ -312,6 +333,73 @@ public class MainActivity extends Activity implements View.OnClickListener {
             selectedPhotosListWithRestOfEmotions.add(name);
             photosListWithRestOfEmotions.remove(name);
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1:
+                animationEnds = true;
+                break;
+        }
+    }
+
+    private void StartTimer(Level l)
+    {
+        //timer! seconds * 1000
+        if(l.timeLimit != 0)
+        {
+            new CountDownTimer(l.timeLimit * 1000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+
+
+                }
+                public void onFinish() {
+                    LinearLayout imagesLinear = (LinearLayout)findViewById(R.id.imageGallery);
+
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation((float)0.1);
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+
+                    final int childcount = imagesLinear.getChildCount();
+                    for (int i = 0; i < childcount; i++)
+                    {
+                        ImageView image = (ImageView) imagesLinear.getChildAt(i);
+                        if(image.getId() != 1)
+                        {
+                            image.setColorFilter(filter);
+                        }
+
+                    }
+                    timeout ++;
+                }
+            }.start();
+
+           /* final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LinearLayout imagesLinear = (LinearLayout)findViewById(R.id.imageGallery);
+
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation((float)0.1);
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+
+                    final int childcount = imagesLinear.getChildCount();
+                    for (int i = 0; i < childcount; i++)
+                    {
+                        ImageView image = (ImageView) imagesLinear.getChildAt(i);
+                        if(image.getId() != 1)
+                        {
+                            image.setColorFilter(filter);
+                        }
+
+                    }
+                    timeout ++;
+                }
+            }, l.timeLimit * 1000);*/
         }
     }
 }
