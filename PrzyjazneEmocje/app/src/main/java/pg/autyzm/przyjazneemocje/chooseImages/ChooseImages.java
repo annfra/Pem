@@ -84,7 +84,7 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
         String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
         String newFileName = "";
-        boolean finded = true;
+
         String[] photosNameList = new File(root + "/Emotions").list();
         if(cursor.getCount() < photosNameList.length)
         {
@@ -93,14 +93,15 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
                 String tmp = fileName.replace(".jpg","").replaceAll("[0-9]","");
                 if(tmp.equals(choosenEmotion))
                 {
+                    boolean finded = false;
                     while(cursor.moveToNext())
                     {
-                        if(cursor.getString(3) == fileName)
+
+                        if(cursor.getString(3).equals(fileName))
                         {
                             finded = true;
                             break;
                         }
-                        finded = false;
                     }
                     if(finded == false)
                         sqlm.addPhoto(1,choosenEmotion,fileName);
