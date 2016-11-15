@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     SqlliteManager sqlm;
     int wrongAnswers;
     int rightAnswers;
+    String commandText;
 
 
     @Override
@@ -61,7 +63,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         cur0 = sqlm.giveAllLevels();
         findNextActiveLevel();
+        final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
+        speakerButton.setOnClickListener(new View.OnClickListener() {
+            final Speaker speaker = Speaker.getInstance(MainActivity.this);
 
+            public void onClick(View v) {
+                speaker.speak(commandText);
+            }
+        });
 
     }
 
@@ -198,7 +207,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
         String rightEm = goodAnswer.replace(".jpg","").replaceAll("[0-9.]", "");
         String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEm, "string", getPackageName()));
-        txt.setText(getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang);
+        commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
+        txt.setText(commandText);
 
         LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.imageGallery);
 
