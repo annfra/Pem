@@ -401,7 +401,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Bundle bundle = data.getExtras();
-                photosOrVideosList.addAll(bundle.getIntegerArrayList("selected_photos"));
+                photosOrVideosList = bundle.getIntegerArrayList("selected_photos");
+                //photosOrVideosList.addAll(bundle.getIntegerArrayList("selected_photos"));
                 updateListSize();
             }
         }

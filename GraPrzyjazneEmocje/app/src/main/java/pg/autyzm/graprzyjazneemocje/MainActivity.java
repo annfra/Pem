@@ -219,7 +219,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         TextView txt = (TextView) findViewById(R.id.rightEmotion);
-        txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
+       // txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
         String rightEm = goodAnswer.replace(".jpg","").replaceAll("[0-9.]", "");
         String rightEmotionLang = getResources().getString(getResources().getIdentifier("emotion_" + rightEm, "string", getPackageName()));
         commandText = getResources().getString(R.string.label_show_emotion) + " " + rightEmotionLang;
@@ -228,10 +228,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.imageGallery);
 
         linearLayout1.removeAllViews();
+        int listSize=photosList.size();
 
+        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 790/listSize, getResources().getDisplayMetrics());
+        int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50-(150/listSize), getResources().getDisplayMetrics());
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(350, 350);
-        lp.setMargins(0, 0, 30, 0);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(height, height);
+        lp.setMargins(45/listSize, 10, 45/listSize, margin);
         lp.gravity = Gravity.CENTER;
         for(String photoName:photosList)
         {

@@ -12,6 +12,7 @@
     <string name="level_name">New level</string>
     <string name="label_level_name">Level name: </string>
     <string name="label_level_list">Levels list: </string>
+    <string name="active">active </string>
 
 
     <string name="emotion_happy">happy</string>
