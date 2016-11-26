@@ -16,6 +16,8 @@ public class Level {
     int timeLimit;
     int pvPerLevel;
     boolean isLevelActive;
+    int sublevels;
+    int correctness;
 
     String name;
 
@@ -37,6 +39,9 @@ public class Level {
             timeLimit = cur.getInt(cur.getColumnIndex("time_limit"));
             pvPerLevel = cur.getInt(cur.getColumnIndex("photos_or_videos_per_level"));
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
+
+            correctness = cur.getInt(cur.getColumnIndex("correctness"));
+            sublevels = cur.getInt(cur.getColumnIndex("sublevels"));
 
             isLevelActive = (active != 0);
             name = cur.getString(cur.getColumnIndex("name"));

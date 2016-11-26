@@ -22,7 +22,8 @@ public class SqlliteManager extends SQLiteOpenHelper {
     {
         db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
-        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, time_limit int, is_level_active boolean, name text);" + "");
+        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
+                "time_limit int, is_level_active boolean, name text, correctness int, sublevels int);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
         db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
 
@@ -63,6 +64,8 @@ public class SqlliteManager extends SQLiteOpenHelper {
         values.put("photos_or_videos_per_level",level.pvPerLevel);
         values.put("time_limit",level.timeLimit);
         values.put("is_level_active", level.isLevelActive);
+        values.put("correctness",level.correctness);
+        values.put("sublevels", level.sublevels);
 
 
         if(level.id != 0) {
@@ -220,9 +223,9 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public Cursor giveLevel(int id)
     {
-        String[] columns = {"id", "photos_or_videos"};
+
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
+        Cursor cursor;
 
 
         cursor =  db.rawQuery("select * from levels where id='" + id + "'" , null);

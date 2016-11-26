@@ -125,6 +125,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         EditText timeLimit = (EditText)findViewById(R.id.time_limit);
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
+        EditText correctness = (EditText)findViewById(R.id.correctness);
+        EditText sublevels = (EditText)findViewById(R.id.sublevels);
         EditText levelName  = (EditText)findViewById(R.id.level_name);
         Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
 //        TextView tv = (TextView) findViewById(R.id.imagesCount);
@@ -133,6 +135,11 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         timeLimit.setText(Integer.toString(l.timeLimit));
         vpPerLevel.setText(Integer.toString(l.pvPerLevel));
+        correctness.setText(Integer.toString(l.correctness));
+        sublevels.setText(Integer.toString(l.sublevels));
+
+
+
         levelName.setText(l.name);
 //        String str = getResources().getString(R.string.select);
 //        tv.setText(str + ": " + l.photosOrVideosList.size());
@@ -290,11 +297,15 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         EditText timeLimit = (EditText)findViewById(R.id.time_limit);
+        EditText correctness = (EditText)findViewById(R.id.correctness);
+        EditText sublevels = (EditText)findViewById(R.id.sublevels);
         EditText levelName = (EditText)findViewById(R.id.level_name);
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
 
         l.timeLimit = Integer.parseInt(timeLimit.getText() + "");
         l.pvPerLevel = Integer.parseInt(vpPerLevel.getText() + "");
+        l.correctness = Integer.parseInt(correctness.getText() + "");
+        l.sublevels = Integer.parseInt(sublevels.getText() + "");
 
         l.name = levelName.getText().toString();
 
