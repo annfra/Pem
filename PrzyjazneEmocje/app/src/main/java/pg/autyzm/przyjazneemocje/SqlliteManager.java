@@ -20,6 +20,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db)
     {
+        System.out.println("Tworze tablee");
         db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
         db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +

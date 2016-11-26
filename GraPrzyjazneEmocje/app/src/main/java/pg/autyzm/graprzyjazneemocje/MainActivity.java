@@ -34,6 +34,8 @@ import java.util.Random;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    int sublevelsLeft;
+    List<Integer> sublevelsList;
 
     List<String> photosListWithEmotionSelected;
     List<String> photosListWithRestOfEmotions;
@@ -46,6 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     int timeout;
     String commandText;
     boolean animationEnds = true;
+    Level l;
 
 
     @Override
@@ -85,6 +88,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         boolean findNextActiveLevel(){
 
+            if(sublevelsLeft != 0){
+                generateSublevel(sublevelsList.get(sublevelsLeft - 1));
+                return true;
+            }
+
+            // zaraz zostanie zaladowany nowy poziom (skonczyly sie podpoziomy. trzeba ustalic, czy dziecko odpowiedzialo wystarczajaco dobrze, by przejsc dalej
+
+
+
+
+            double doubleWrongAnswers = wrongAnswers;
+            double doubleRightAnswers = rightAnswers;
+
+            // zeby uniknac dzielenia przez zero
+            if(wrongAnswers + rightAnswers != 0) {
+
+                System.out.println(doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers));
+                System.out.println((doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers) * 100));
+
+                if ((doubleWrongAnswers / doubleWrongAnswers + doubleRightAnswers) * 100 > l.correctness) {
+
+                    System.out.println("Dziecko nie powinno przejsc dalej.");
+
+                }
+            }
 
 
             while(cur0.moveToNext()){
@@ -114,7 +142,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             int levelId = 0;
             int photosPerLvL = 0;
-            Level l = null;
+            l = null;
 
             System.out.println(cur0.getCount());
 
@@ -135,83 +163,112 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if(! l.isLevelActive) return false;
 
 
+            // tworzymy tablice do permutowania
 
-            // nizej kod napisany 11.11.16
+            sublevelsLeft = l.emotions.size() * l.sublevels;
 
+            sublevelsList = new ArrayList<Integer>();
 
-            // wylosuj emocje z wybranych emocji, odczytaj jej imie (bo mamy liste id)
-            int emotionIndexInList = selectEmotionToChoose(l);
-            //System.out.println("Wybrana emocja indeks " + emotionIndexInList);
-            //System.out.println("Wybrana emocja id " + l.emotions.get(emotionIndexInList));
-            Cursor emotionCur = sqlm.giveEmotionName(l.emotions.get(emotionIndexInList));
+            for(int i = 0; i < l.emotions.size(); i++){
 
-            emotionCur.moveToFirst();
-            String selectedEmotionName = emotionCur.getString(emotionCur.getColumnIndex("emotion"));
-            System.out.println("Wybrana emocja name " + selectedEmotionName);
-            // po kolei czytaj nazwy emocji wybranych zdjec, jesli ich emocja = wybranej emocji, idzie do listy a, jesli nie, lista b
+                for(int j = 0; j < l.sublevels; j++){
 
-            photosListWithEmotionSelected = new ArrayList<String>();
-            photosListWithRestOfEmotions = new ArrayList<String>();
-            selectedPhotosListWithRestOfEmotions = new ArrayList<String>();
-
-
-
-            for(int e : l.photosOrVideosList){
-
-                System.out.println("Id zdjecia: " + e);
-                Cursor curEmotion = sqlm.givePhotoWithId(e);
-
-
-
-                curEmotion.moveToFirst();
-                String photoEmotionName = curEmotion.getString(curEmotion.getColumnIndex("emotion"));
-                String photoName = curEmotion.getString(curEmotion.getColumnIndex("name"));
-
-
-                System.out.println(photoEmotionName + " " + selectedEmotionName);
-
-                if(photoEmotionName.equals(selectedEmotionName)){
-                    photosListWithEmotionSelected.add(photoName);
-                }
-                else{
-                    photosListWithRestOfEmotions.add(photoName);
-                    System.out.println("Dodano cos do reszty zdjec " + photosListWithRestOfEmotions.size());
+                    sublevelsList.add(l.emotions.get(i));
 
                 }
 
             }
 
-            // z listy a wybieramy jedno zdjecie, ktore bedzie prawidlowa odpowiedzia
-
-            goodAnswer = selectPhotoWithSelectedEmotion();
-
-            // z listy b wybieramy zdjecia nieprawidlowe
-
-            selectPhotoWithNotSelectedEmotions(l.pvPerLevel);
-
-            // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
-            // do zrobienia - by nie zawsze poprawna odpowiedz byla na koncu
-
-            selectedPhotosListWithRestOfEmotions.add(goodAnswer);
-            List<String> photosList = selectedPhotosListWithRestOfEmotions;
-
-            // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
+            java.util.Collections.shuffle(sublevelsList);
 
 
-            generateView(photosList);
-            System.out.println("Wygenerowano view");
+
+             generateSublevel(sublevelsList.get(sublevelsLeft - 1));
 
 
-            //timer?
-            if(animationEnds == true)
-                StartTimer(l);
+
+
+            // wylosuj emocje z wybranych emocji, odczytaj jej imie (bo mamy liste id)
+            //int emotionIndexInList = selectEmotionToChoose(l);
+
 
 
             return true;
 
+    }
+
+    void generateSublevel(int emotionIndexInList){
+
+
+
+        //System.out.println("Wybrana emocja indeks " + emotionIndexInList);
+        //System.out.println("Wybrana emocja id " + l.emotions.get(emotionIndexInList));
+        Cursor emotionCur = sqlm.giveEmotionName(emotionIndexInList);
+
+        emotionCur.moveToFirst();
+        String selectedEmotionName = emotionCur.getString(emotionCur.getColumnIndex("emotion"));
+        //System.out.println("Wybrana emocja name " + selectedEmotionName);
+        // po kolei czytaj nazwy emocji wybranych zdjec, jesli ich emocja = wybranej emocji, idzie do listy a, jesli nie, lista b
+
+        photosListWithEmotionSelected = new ArrayList<String>();
+        photosListWithRestOfEmotions = new ArrayList<String>();
+        selectedPhotosListWithRestOfEmotions = new ArrayList<String>();
+
+
+
+        for(int e : l.photosOrVideosList){
+
+            //System.out.println("Id zdjecia: " + e);
+            Cursor curEmotion = sqlm.givePhotoWithId(e);
+
+
+
+            curEmotion.moveToFirst();
+            String photoEmotionName = curEmotion.getString(curEmotion.getColumnIndex("emotion"));
+            String photoName = curEmotion.getString(curEmotion.getColumnIndex("name"));
+
+
+            //System.out.println(photoEmotionName + " " + selectedEmotionName);
+
+            if(photoEmotionName.equals(selectedEmotionName)){
+                photosListWithEmotionSelected.add(photoName);
+            }
+            else{
+                photosListWithRestOfEmotions.add(photoName);
+
+            }
+
+        }
+
+        // z listy a wybieramy jedno zdjecie, ktore bedzie prawidlowa odpowiedzia
+
+        goodAnswer = selectPhotoWithSelectedEmotion();
+
+        // z listy b wybieramy zdjecia nieprawidlowe
+
+        selectPhotoWithNotSelectedEmotions(l.pvPerLevel);
+
+        // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
+        // do zrobienia - by nie zawsze poprawna odpowiedz byla na koncu
+
+        selectedPhotosListWithRestOfEmotions.add(goodAnswer);
+        List<String> photosList = selectedPhotosListWithRestOfEmotions;
+
+        // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
+
+
+        generateView(photosList);
+        System.out.println("Wygenerowano view");
+
+
+        //timer?
+        if(animationEnds == true)
+            StartTimer(l);
+
+
+
+
         // /birgiel
-
-
 
     }
 
@@ -240,7 +297,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
             File fileOut = new File(root + "Emotions" + File.separator + photoName);
-            System.out.println(root + "Emotions" + File.separator + photoName);
+            //System.out.println(root + "Emotions" + File.separator + photoName);
             try {
 
                 ImageView image = new ImageView(MainActivity.this);
@@ -282,6 +339,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             //startActivity(i);
             rightAnswers++;
 
+            sublevelsLeft--;
+
             if(! findNextActiveLevel()){
                 System.out.println("Skonczyly sie poziomy");
                 Intent in = new Intent(this, EndActivity.class);
@@ -302,7 +361,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     }
-
+/*
     int selectEmotionToChoose(Level l){
 
         Random rand = new Random();
@@ -311,7 +370,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         return emotionIndexInList;
     }
-
+*/
     String selectPhotoWithSelectedEmotion(){
 
         Random rand = new Random();
