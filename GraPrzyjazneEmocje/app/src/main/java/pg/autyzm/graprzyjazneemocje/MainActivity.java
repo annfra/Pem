@@ -45,7 +45,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     SqlliteManager sqlm;
     int wrongAnswers;
     int rightAnswers;
+    int wrongAnswersSublevel;
+    int rightAnswersSublevel;
     int timeout;
+    int timeoutSubLevel;
     String commandText;
     boolean animationEnds = true;
     Level l;
@@ -71,7 +74,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // Birgiel
 
         cur0 = sqlm.giveAllLevels();
+
         findNextActiveLevel();
+
+        generateView(selectedPhotosListWithRestOfEmotions);
+        System.out.println("Wygenerowano view");
+
+
+
         final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
         speakerButton.setOnClickListener(new View.OnClickListener() {
             final Speaker speaker = Speaker.getInstance(MainActivity.this);
@@ -98,21 +108,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-            double doubleWrongAnswers = wrongAnswers;
-            double doubleRightAnswers = rightAnswers;
 
-            // zeby uniknac dzielenia przez zero
-            if(wrongAnswers + rightAnswers != 0) {
-
-                System.out.println(doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers));
-                System.out.println((doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers) * 100));
-
-                if ((doubleWrongAnswers / doubleWrongAnswers + doubleRightAnswers) * 100 > l.correctness) {
-
-                    System.out.println("Dziecko nie powinno przejsc dalej.");
-
-                }
-            }
 
 
             while(cur0.moveToNext()){
@@ -137,6 +133,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         boolean loadLevel(){
+
+
+            wrongAnswersSublevel = 0;
+            rightAnswersSublevel = 0;
+            timeoutSubLevel = 0;
+
+
 
             System.out.println("---------------Nowy poziom-------------------");
 
@@ -252,13 +255,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // do zrobienia - by nie zawsze poprawna odpowiedz byla na koncu
 
         selectedPhotosListWithRestOfEmotions.add(goodAnswer);
-        List<String> photosList = selectedPhotosListWithRestOfEmotions;
 
         // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
 
 
-        generateView(photosList);
-        System.out.println("Wygenerowano view");
+
 
 
         //timer?
@@ -334,33 +335,90 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if(v.getId() == 1) {
             animationEnds = false;
-            Intent i = new Intent(this, AnimationActivity.class);
-            startActivityForResult(i, 1);
-            //startActivity(i);
-            rightAnswers++;
-
             sublevelsLeft--;
+            rightAnswers++;
+            rightAnswersSublevel++;
 
-            if(! findNextActiveLevel()){
-                System.out.println("Skonczyly sie poziomy");
-                Intent in = new Intent(this, EndActivity.class);
-                in.putExtra("WRONG", wrongAnswers);
-                in.putExtra("RIGHT", rightAnswers);
-                in.putExtra("TIMEOUT", timeout);
-                startActivity(in);
+            boolean correctness = true;
+
+            if(sublevelsLeft == 0) {
+                correctness = checkCorrectness();
             }
+
+
+
+
+            if(correctness) {
+
+                Intent i = new Intent(this, AnimationActivity.class);
+                startActivityForResult(i, 1);
+
+            }
+            else{
+
+                Intent i = new Intent(this, LevelFailedActivity.class);
+                startActivityForResult(i, 2);
+
+            }
+            //startActivity(i);
+
+
+
+
+
 
 
         }
         else //jesli nie wybrano wlasciwej
         {
             wrongAnswers++;
+            wrongAnswersSublevel++;
         }
 
 
 
 
     }
+
+    boolean checkCorrectness(){
+/*
+        double doubleWrongAnswers = wrongAnswersSublevel;
+        double doubleRightAnswers = rightAnswersSublevel;
+
+        // zeby uniknac dzielenia przez zero
+        if(wrongAnswersSublevel + rightAnswersSublevel != 0) {
+
+            System.out.println(doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers));
+            System.out.println((doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers) * 100));
+
+            if ((doubleWrongAnswers / doubleWrongAnswers + doubleRightAnswers) * 100 > l.correctness) {
+
+                System.out.println("Dziecko nie powinno przejsc dalej.");
+
+                //Intent i = new Intent(this, LevelFailedActivity.class);
+               // startActivityForResult(i, 2);
+
+                return false;
+
+            }
+        }
+
+*/
+
+
+        if(wrongAnswersSublevel > l.correctness){
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+
+
+
 /*
     int selectEmotionToChoose(Level l){
 
@@ -403,6 +461,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch(requestCode) {
             case 1:
                 animationEnds = true;
+
+                if(! findNextActiveLevel()){
+                    System.out.println("Skonczyly sie poziomy");
+                    Intent in = new Intent(this, EndActivity.class);
+                    in.putExtra("WRONG", wrongAnswers);
+                    in.putExtra("RIGHT", rightAnswers);
+                    in.putExtra("TIMEOUT", timeout);
+                    startActivity(in);
+                }
+
+                generateView(selectedPhotosListWithRestOfEmotions);
+                System.out.println("Wygenerowano view");
+
+                break;
+            case 2:
+
+                System.out.println("Trzeba zaczas poziom od nowa, bo dziecko dalo za duzo blednych odpowiedzi.");
+
+                java.util.Collections.shuffle(sublevelsList);
+                sublevelsLeft = l.emotions.size() * l.sublevels;
+
+                wrongAnswersSublevel = 0;
+                rightAnswersSublevel = 0;
+                timeoutSubLevel = 0;
+
+                generateSublevel(sublevelsList.get(sublevelsLeft - 1));
+
                 break;
         }
     }
@@ -436,6 +521,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     }
                     timeout ++;
+                    timeoutSubLevel++;
                 }
             }.start();
 
