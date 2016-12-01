@@ -16,8 +16,8 @@ import java.util.Random;
 
 public class AnimationActivity extends Activity implements Animation.AnimationListener {
 
-    private ImageView animImage;
-    private Animation anim;
+    protected ImageView animImage;
+    protected Animation anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
     @Override
     public void onAnimationRepeat(Animation animation) {
     }
+
 
     private void awardSpiral() {
         setContentView(R.layout.activity_anim_spiral);
@@ -94,7 +95,7 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     }
 
-    private void randomAward() {
+    protected void randomAward() {
         Random rand = new Random();
         int k = rand.nextInt(3);
         switch (k) {

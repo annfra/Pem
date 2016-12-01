@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AnimationActivity" />
+        <activity android:name=".AnimationEndActivity" />
         <activity android:name=".EndActivity" />
         <activity
             android:name=".LevelFailedActivity"

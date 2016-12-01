@@ -1,6 +1,7 @@
 package pg.autyzm.graprzyjazneemocje;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.TextView;
@@ -15,7 +16,8 @@ public class EndActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end);
 
-
+        Intent i = new Intent(this, AnimationEndActivity.class);
+        startActivity(i);
         TextView txt = (TextView) findViewById(R.id.endTextMain);
         txt.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
         txt.setText(getResources().getString(R.string.label_congratulations));
@@ -34,9 +36,6 @@ public class EndActivity extends Activity {
         TextView time = (TextView) findViewById(R.id.timeout);
         time.setTextSize(TypedValue.COMPLEX_UNIT_PX,50);
         time.setText(getResources().getString(R.string.label_timeout) + " " + timeout);
-
-
-
 
     }
 
