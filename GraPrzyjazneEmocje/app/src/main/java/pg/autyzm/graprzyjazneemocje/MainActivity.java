@@ -53,6 +53,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     boolean animationEnds = true;
     Level l;
 
+    public Speaker speaker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +82,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         generateView(selectedPhotosListWithRestOfEmotions);
         System.out.println("Wygenerowano view");
 
+        //JG
 
+        speaker = Speaker.getInstance(MainActivity.this);
 
         final ImageButton speakerButton = (ImageButton) findViewById(R.id.matchEmotionsSpeakerButton);
         speakerButton.setOnClickListener(new View.OnClickListener() {
-            final Speaker speaker = Speaker.getInstance(MainActivity.this);
 
             public void onClick(View v) {
                 speaker.speak(commandText);
             }
         });
-
-
+        speaker.speak("adfs");
 
     }
 
@@ -349,15 +351,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
             if(correctness) {
-
                 Intent i = new Intent(this, AnimationActivity.class);
                 startActivityForResult(i, 1);
 
             }
             else{
+                startEndActivity(false);
 
-                Intent i = new Intent(this, LevelFailedActivity.class);
-                startActivityForResult(i, 2);
+//                Intent i = new Intent(this, LevelFailedActivity.class);
+//                startActivityForResult(i, 2);
 
             }
             //startActivity(i);
@@ -464,11 +466,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 if(! findNextActiveLevel()){
                     System.out.println("Skonczyly sie poziomy");
-                    Intent in = new Intent(this, EndActivity.class);
-                    in.putExtra("WRONG", wrongAnswers);
-                    in.putExtra("RIGHT", rightAnswers);
-                    in.putExtra("TIMEOUT", timeout);
-                    startActivity(in);
+
+                    startEndActivity(true);
                 }
 
                 generateView(selectedPhotosListWithRestOfEmotions);
@@ -490,6 +489,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 break;
         }
+    }
+    private void startEndActivity(boolean pass){
+        Intent in = new Intent(this, EndActivity.class);
+        in.putExtra("PASS", pass);
+        in.putExtra("WRONG", wrongAnswers);
+        in.putExtra("RIGHT", rightAnswers);
+        in.putExtra("TIMEOUT", timeout);
+        startActivity(in);
     }
 
     private void StartTimer(Level l)

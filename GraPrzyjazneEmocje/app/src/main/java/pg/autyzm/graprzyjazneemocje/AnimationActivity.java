@@ -57,18 +57,19 @@ public class AnimationActivity extends Activity implements Animation.AnimationLi
 
     private void awardStraight() {
         setContentView(R.layout.activity_anim_straight);
-        animImage = (ImageView) findViewById(R.id.butterfly_image);
-        anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
-        animImage.startAnimation(anim);
-        animImage = (ImageView) findViewById(R.id.butterfly2_image);
-        anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.down);
-        animImage.startAnimation(anim);
-        animImage = (ImageView) findViewById(R.id.butterfly3_image);
-        anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
-        animImage.startAnimation(anim);
-        animImage = (ImageView) findViewById(R.id.butterfly4_image);
-        anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.down);
 
+        int butterflyimages[] = {R.id.butterfly_image, R.id.butterfly2_image, R.id.butterfly3_image, R.id.butterfly4_image};
+        int n = 0;
+        for (int image : butterflyimages) {
+
+            animImage = (ImageView) findViewById(image);
+            if((n++)%2==0) {
+                anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.up);
+            } else {
+                anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.down);
+            }
+            animImage.startAnimation(anim);
+        }
     }
 
     private void awardUp() {

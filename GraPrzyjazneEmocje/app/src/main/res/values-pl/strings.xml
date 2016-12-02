@@ -11,4 +11,6 @@
     <string name="emotion_angry">zły</string>
     <string name="emotion_scared">przestraszony</string>
     <string name="emotion_bored">znudzony</string>
+
+    <string name="failed_level">Nie udało Ci się rozpoznać wszystkich emocji. Spróbuj ponownie</string>
 </resources>
