@@ -68,7 +68,7 @@
         android:background="@null"
         android:onClick="repeatLevel"
         android:scaleType="centerCrop"
-        android:src="@drawable/icon_prev" />
+        android:src="@drawable/icon_exit" />
 
     <TextView
         android:id="@+id/endTextMain"

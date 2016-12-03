@@ -258,6 +258,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         selectedPhotosListWithRestOfEmotions.add(goodAnswer);
 
+        java.util.Collections.shuffle(selectedPhotosListWithRestOfEmotions);
+
+
         // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
 
 
