@@ -6,14 +6,14 @@
     <string name="default_message">Nie wybrano zdjęć</string>
     <string name="save_message">Zapisano poziom</string>
     <string name="select">wybrano</string>
-    <string name="pv_per_level">Zdjęcia/filmy na poziom</string>
+    <string name="pv_per_level">Zdjęcia na poziom</string>
     <string name="time_limit">Limit czasu</string>
     <string name="label_emotion">Uczone emocje:</string>
     <string name="level_name">Nowy poziom</string>
     <string name="label_level_name">Nazwa poziomu: </string>
     <string name="label_level_list">Lista poziomów: </string>
     <string name="active">aktywny </string>
-    <string name="correctness">Poprawność (%)</string>
+    <string name="correctness">Poprawność</string>
     <string name="sublevels">Podpoziomy</string>
 
     <string name="emotion_happy">wesoły</string>

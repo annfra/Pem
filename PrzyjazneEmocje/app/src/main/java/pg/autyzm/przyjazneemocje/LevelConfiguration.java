@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -95,7 +96,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         View buttonChoose = findViewById(R.id.button_choose_images);
         buttonChoose.setOnClickListener(this);
 
-        Button buttonCamera = (Button) findViewById(R.id.button_take_photo);
+        ImageButton buttonCamera = (ImageButton) findViewById(R.id.button_take_photo);
         buttonCamera.setOnClickListener(this);
 
         //updateLevelList();
@@ -128,7 +129,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         EditText correctness = (EditText)findViewById(R.id.correctness);
         EditText sublevels = (EditText)findViewById(R.id.sublevels);
         EditText levelName  = (EditText)findViewById(R.id.level_name);
-        Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
+//        Spinner photosOrVideos = (Spinner)findViewById(R.id.spinner2);
 //        TextView tv = (TextView) findViewById(R.id.imagesCount);
 
 
@@ -146,12 +147,12 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         updateListSize();
 
-        if(l.photosOrVideos.equals("Videos")){
-            photosOrVideos.setSelection(1);
-        }
-        else{
-            photosOrVideos.setSelection(0);
-        }
+//        if(l.photosOrVideos.equals("Videos")){
+//            photosOrVideos.setSelection(1);
+//        }
+//        else{
+//            photosOrVideos.setSelection(0);
+//        }
 
 
         for(int i : l.emotions){
@@ -289,9 +290,9 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         Level l = new Level();
 
-        Spinner spinner = (Spinner)findViewById(R.id.spinner2);
+//        Spinner spinner = (Spinner)findViewById(R.id.spinner2);
 
-        l.photosOrVideos = spinner.getSelectedItem().toString();
+//        l.photosOrVideos = spinner.getSelectedItem().toString();
 
         //System.out.println(l.photosOrVideos);
 
