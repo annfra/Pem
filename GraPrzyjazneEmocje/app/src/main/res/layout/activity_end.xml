@@ -58,18 +58,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/icon_exit" />
 
-    <ImageButton
-        android:id="@+id/prevButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@null"
-        android:onClick="repeatLevel"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icon_next" />
-
     <TextView
         android:id="@+id/endTextMain"
         android:layout_width="match_parent"

@@ -96,6 +96,7 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
                     boolean finded = false;
                     while(cursor.moveToNext())
                     {
+                        String n = cursor.getString(3);
 
                         if(cursor.getString(3).equals(fileName))
                         {

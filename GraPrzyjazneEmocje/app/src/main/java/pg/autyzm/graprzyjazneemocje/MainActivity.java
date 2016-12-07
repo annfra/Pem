@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -52,6 +55,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     String commandText;
     boolean animationEnds = true;
     Level l;
+    CountDownTimer timer;
 
     public Speaker speaker;
 
@@ -265,11 +269,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
+        StartTimer(l);
+           /* final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    LinearLayout imagesLinear = (LinearLayout)findViewById(R.id.imageGallery);
 
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation((float)0.1);
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
 
-        //timer?
-        if(animationEnds == true)
-            StartTimer(l);
+                    final int childcount = imagesLinear.getChildCount();
+                    for (int i = 0; i < childcount; i++)
+                    {
+                        ImageView image = (ImageView) imagesLinear.getChildAt(i);
+                        if(image.getId() != 1)
+                        {
+                            image.setColorFilter(filter);
+                        }
+
+                    }
+                    timeout ++;
+                }
+            }, l.timeLimit * 1000);*/
+
 
 
 
@@ -343,6 +367,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             sublevelsLeft--;
             rightAnswers++;
             rightAnswersSublevel++;
+            timer.cancel();
 
             boolean correctness = true;
 
@@ -507,7 +532,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //timer! seconds * 1000
         if(l.timeLimit != 0)
         {
-            new CountDownTimer(l.timeLimit * 1000, 1000) {
+            timer = new CountDownTimer(l.timeLimit * 1000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
 
@@ -528,6 +553,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         {
                             image.setColorFilter(filter);
                         }
+                        else
+                        {
+                            image.setPadding(40,40,40,40);
+                            image.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                            /*
+                            image.buildDrawingCache();
+                            Bitmap bmap = image.getDrawingCache();
+                            Bitmap paddedBitmap = Bitmap.createBitmap(
+                                    bmap.getWidth() + 40,
+                                    bmap.getHeight() + 36,
+                                    Bitmap.Config.ARGB_8888);
+
+                            Canvas canvas = new Canvas(paddedBitmap);
+                            canvas.drawARGB(0xFF, 0xFF, 0xFF, 0xFF); // this represents white color
+                            canvas.drawBitmap(bmap,20,20,new Paint(Paint.FILTER_BITMAP_FLAG));
+                            image.setImageBitmap(paddedBitmap);
+                            */
+                        }
 
                     }
                     timeout ++;
@@ -535,29 +578,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }.start();
 
-           /* final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    LinearLayout imagesLinear = (LinearLayout)findViewById(R.id.imageGallery);
-
-                    ColorMatrix matrix = new ColorMatrix();
-                    matrix.setSaturation((float)0.1);
-                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-
-                    final int childcount = imagesLinear.getChildCount();
-                    for (int i = 0; i < childcount; i++)
-                    {
-                        ImageView image = (ImageView) imagesLinear.getChildAt(i);
-                        if(image.getId() != 1)
-                        {
-                            image.setColorFilter(filter);
-                        }
-
-                    }
-                    timeout ++;
-                }
-            }, l.timeLimit * 1000);*/
         }
     }
 }
