@@ -56,7 +56,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     boolean animationEnds = true;
     Level l;
     CountDownTimer timer;
-
     public Speaker speaker;
 
 
@@ -69,7 +68,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-
 
 
 
@@ -97,7 +95,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 speaker.speak(commandText);
             }
         });
-        speaker.speak("adfs");
+
+
 
     }
 
@@ -110,9 +109,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
 
             // zaraz zostanie zaladowany nowy poziom (skonczyly sie podpoziomy. trzeba ustalic, czy dziecko odpowiedzialo wystarczajaco dobrze, by przejsc dalej
-
-
-
 
 
 

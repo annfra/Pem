@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ public class EndActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end);
 
@@ -51,6 +53,8 @@ public class EndActivity extends Activity {
 
         TextView txt = (TextView) findViewById(R.id.endTextMain);
         txt.setText(getResources().getString(R.string.label_congratulations));
+        ImageButton prevButton = (ImageButton) findViewById(R.id.prevButton);
+        prevButton.setVisibility(View.INVISIBLE);
 
     }
 

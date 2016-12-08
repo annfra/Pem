@@ -90,14 +90,15 @@ public class ChooseImages extends Activity implements android.widget.CompoundBut
         {
             for(String fileName : photosNameList)
             {
+
                 String tmp = fileName.replace(".jpg","").replaceAll("[0-9]","");
                 if(tmp.equals(choosenEmotion))
                 {
-                    boolean finded = false;
+                    cursor = sqlm.givePhotosWithEmotion(choosenEmotion);
+                    boolean finded = true;
                     while(cursor.moveToNext())
                     {
-                        String n = cursor.getString(3);
-
+                        finded = false;
                         if(cursor.getString(3).equals(fileName))
                         {
                             finded = true;

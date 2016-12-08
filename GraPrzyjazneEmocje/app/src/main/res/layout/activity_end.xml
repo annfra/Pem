@@ -47,38 +47,39 @@
 
     </LinearLayout>
 
+    <!--
     <ImageButton
-        android:id="@+id/exitButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@null"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icon_exit" />
+       android:id="@+id/exitButton"
+       android:layout_width="80dp"
+       android:layout_height="80dp"
+       android:layout_alignParentEnd="true"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentTop="true"
+       android:background="@null"
+       android:scaleType="centerCrop"
+       android:src="@drawable/icon_exit" />
+       -->
 
-    <TextView
-        android:id="@+id/endTextMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:textColor="@color/command"
-        android:textSize="40dp"
-        android:layout_below="@+id/exitButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+   <TextView
+       android:id="@+id/endTextMain"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="center_horizontal"
+       android:textColor="@color/command"
+       android:textSize="40dp"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentStart="true" />
 
-    <ImageButton
-        android:id="@+id/prevButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@null"
-        android:onClick="repeatLevel"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icon_prev"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+   <ImageButton
+       android:id="@+id/prevButton"
+       android:layout_width="80dp"
+       android:layout_height="80dp"
+       android:background="@null"
+       android:onClick="repeatLevel"
+       android:scaleType="centerCrop"
+       android:src="@drawable/icon_prev"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentStart="true" />
 
 </RelativeLayout>
