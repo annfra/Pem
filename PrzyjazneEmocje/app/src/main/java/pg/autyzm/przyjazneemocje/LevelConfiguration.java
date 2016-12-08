@@ -141,6 +141,13 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
 
+        for(Integer i : l.photosOrVideosList){
+
+            photosOrVideosList.add(i);
+
+        }
+
+
         levelName.setText(l.name);
 //        String str = getResources().getString(R.string.select);
 //        tv.setText(str + ": " + l.photosOrVideosList.size());

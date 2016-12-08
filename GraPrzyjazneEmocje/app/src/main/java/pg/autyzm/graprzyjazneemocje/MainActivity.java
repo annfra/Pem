@@ -524,7 +524,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         in.putExtra("WRONG", wrongAnswers);
         in.putExtra("RIGHT", rightAnswers);
         in.putExtra("TIMEOUT", timeout);
-        startActivity(in);
+
+
+        startActivityForResult(in, 2);
+
+        //startActivity(in);
     }
 
     private void StartTimer(Level l)
