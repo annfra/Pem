@@ -45,29 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
-        if(new File(root + "/Emotions").list() != null) {
-
-            for (String emotName : new File(root + "/Emotions").list()) {
-
-                try {
-                    int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
-                    if (emotName.contains("happy"))
-                        sqlm.addPhoto(resID, "happy", emotName);
-                    else if (emotName.contains("angry"))
-                        sqlm.addPhoto(resID, "angry", emotName);
-                    else if (emotName.contains("surprised"))
-                        sqlm.addPhoto(resID, "surprised", emotName);
-                    else if (emotName.contains("bored"))
-                        sqlm.addPhoto(resID, "bored", emotName);
-                    else if (emotName.contains("scared"))
-                        sqlm.addPhoto(resID, "scared", emotName);
-                    else if (emotName.contains("sad"))
-                        sqlm.addPhoto(resID, "sad", emotName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
 
         sqlm.cleanTable("emotions");
@@ -108,6 +85,29 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        if(new File(root + "/Emotions").list() != null) {
+
+            for (String emotName : new File(root + "/Emotions").list()) {
+
+                try {
+                    int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
+                    if (emotName.contains("happy"))
+                        sqlm.addPhoto(resID, "happy", emotName);
+                    else if (emotName.contains("angry"))
+                        sqlm.addPhoto(resID, "angry", emotName);
+                    else if (emotName.contains("surprised"))
+                        sqlm.addPhoto(resID, "surprised", emotName);
+                    else if (emotName.contains("bored"))
+                        sqlm.addPhoto(resID, "bored", emotName);
+                    else if (emotName.contains("scared"))
+                        sqlm.addPhoto(resID, "scared", emotName);
+                    else if (emotName.contains("sad"))
+                        sqlm.addPhoto(resID, "sad", emotName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
     }
