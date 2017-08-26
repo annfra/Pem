@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
 
+import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+
 /**
  * Created by Ann on 13.11.2016.
  */

@@ -34,6 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -162,23 +165,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             l = new Level(cur2, cur3, cur4);
 
-            photosPerLvL = l.pvPerLevel;
+            photosPerLvL = l.getPvPerLevel();
 
 
-            if(! l.isLevelActive) return false;
+            if(!l.isLevelActive()) return false;
 
 
             // tworzymy tablice do permutowania
 
-            sublevelsLeft = l.emotions.size() * l.sublevels;
+            sublevelsLeft = l.getEmotions().size() * l.getSublevels();
 
             sublevelsList = new ArrayList<Integer>();
 
-            for(int i = 0; i < l.emotions.size(); i++){
+            for(int i = 0; i < l.getEmotions().size(); i++){
 
-                for(int j = 0; j < l.sublevels; j++){
+                for(int j = 0; j < l.getSublevels(); j++){
 
-                    sublevelsList.add(l.emotions.get(i));
+                    sublevelsList.add(l.getEmotions().get(i));
 
                 }
 
@@ -221,7 +224,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-        for(int e : l.photosOrVideosList){
+        for(int e : l.getPhotosOrVideosList()){
 
             //System.out.println("Id zdjecia: " + e);
             Cursor curEmotion = sqlm.givePhotoWithId(e);
@@ -251,7 +254,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // z listy b wybieramy zdjecia nieprawidlowe
 
-        selectPhotoWithNotSelectedEmotions(l.pvPerLevel);
+        selectPhotoWithNotSelectedEmotions(l.getPvPerLevel());
 
         // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
         // do zrobienia - by nie zawsze poprawna odpowiedz byla na koncu
@@ -432,7 +435,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 */
 
 
-        if(wrongAnswersSublevel > l.correctness){
+        if(wrongAnswersSublevel > l.getCorrectness()){
 
             return false;
 
@@ -503,7 +506,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 System.out.println("Trzeba zaczas poziom od nowa, bo dziecko dalo za duzo blednych odpowiedzi.");
 
                 java.util.Collections.shuffle(sublevelsList);
-                sublevelsLeft = l.emotions.size() * l.sublevels;
+                sublevelsLeft = l.getEmotions().size() * l.getSublevels();
 
                 wrongAnswersSublevel = 0;
                 rightAnswersSublevel = 0;
@@ -530,9 +533,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void StartTimer(Level l)
     {
         //timer! seconds * 1000
-        if(l.timeLimit != 0)
+        if(l.getTimeLimit() != 0)
         {
-            timer = new CountDownTimer(l.timeLimit * 1000, 1000) {
+            timer = new CountDownTimer(l.getTimeLimit() * 1000, 1000) {
 
                 public void onTick(long millisUntilFinished) {
 

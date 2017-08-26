@@ -5,26 +5,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.SpannedString;
 import android.util.ArrayMap;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import pg.autyzm.przyjazneemocje.LevelConfiguration;
 import pg.autyzm.przyjazneemocje.R;
-import pg.autyzm.przyjazneemocje.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+
 
 /**
  * Created by Joanna on 2016-10-08.

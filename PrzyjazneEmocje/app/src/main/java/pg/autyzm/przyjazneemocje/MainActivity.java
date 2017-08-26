@@ -8,19 +8,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
-import android.app.Activity;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
+
+import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 

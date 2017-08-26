@@ -2,14 +2,11 @@ package pg.autyzm.przyjazneemocje;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.hardware.Camera;
-import android.os.Handler;
 import android.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.chooseImages.ChooseImages;
+import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 public class LevelConfiguration extends AppCompatActivity implements View.OnClickListener{
 
@@ -134,21 +133,21 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
 
-        timeLimit.setText(Integer.toString(l.timeLimit));
-        vpPerLevel.setText(Integer.toString(l.pvPerLevel));
-        correctness.setText(Integer.toString(l.correctness));
-        sublevels.setText(Integer.toString(l.sublevels));
+        timeLimit.setText(Integer.toString(l.getTimeLimit()));
+        vpPerLevel.setText(Integer.toString(l.getPvPerLevel()));
+        correctness.setText(Integer.toString(l.getCorrectness()));
+        sublevels.setText(Integer.toString(l.getSublevels()));
 
 
 
-        for(Integer i : l.photosOrVideosList){
+        for(Integer i : l.getPhotosOrVideosList()){
 
             photosOrVideosList.add(i);
 
         }
 
 
-        levelName.setText(l.name);
+        levelName.setText(l.getName());
 //        String str = getResources().getString(R.string.select);
 //        tv.setText(str + ": " + l.photosOrVideosList.size());
 
@@ -162,7 +161,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 //        }
 
 
-        for(int i : l.emotions){
+        for(int i : l.getEmotions()){
 
             int id = 0;
 
@@ -310,15 +309,15 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         EditText levelName = (EditText)findViewById(R.id.level_name);
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
 
-        l.timeLimit = Integer.parseInt(timeLimit.getText() + "");
-        l.pvPerLevel = Integer.parseInt(vpPerLevel.getText() + "");
-        l.correctness = Integer.parseInt(correctness.getText() + "");
-        l.sublevels = Integer.parseInt(sublevels.getText() + "");
+        l.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
+        l.setPvPerLevel(Integer.parseInt(vpPerLevel.getText() + ""));
+        l.setCorrectness(Integer.parseInt(correctness.getText() + ""));
+        l.setSublevels(Integer.parseInt(sublevels.getText() + ""));
 
-        l.name = levelName.getText().toString();
+        l.setName(levelName.getText().toString());
 
         if(editedLevelId > 0){
-            l.id = editedLevelId;
+            l.setId(editedLevelId);
 
 
             // po przekazaniu informacji, ze mamy juz jakies id (czyli jest to edycja i jakis rekord ma byc nadpisany), zerujemy id, na wypadek,
@@ -327,7 +326,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         }
 
 
-        l.photosOrVideosList = photosOrVideosList;
+        l.setPhotosOrVideosList(photosOrVideosList);
 
         // przerabiamy te dlugie id na krotkie
 
@@ -344,7 +343,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
 
-        l.emotions = emotionsIdsList;
+        l.setEmotions(emotionsIdsList);
 
 
 
@@ -387,7 +386,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 //                }
 //
                 if(l != null) {
-                    bundle.putIntegerArrayList("selected_photos", ( ArrayList<Integer>)l.photosOrVideosList);
+                    bundle.putIntegerArrayList("selected_photos", ( ArrayList<Integer>) l.getPhotosOrVideosList());
                 }
                 //
                 else {
