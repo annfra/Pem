@@ -148,18 +148,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         levelName.setText(l.getName());
-//        String str = getResources().getString(R.string.select);
-//        tv.setText(str + ": " + l.photosOrVideosList.size());
 
         updateListSize();
-
-//        if(l.photosOrVideos.equals("Videos")){
-//            photosOrVideos.setSelection(1);
-//        }
-//        else{
-//            photosOrVideos.setSelection(0);
-//        }
-
 
         for(int i : l.getEmotions()){
 
@@ -293,21 +283,13 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     public void addLevel(View view) {
 
 
-
         Level l = new Level();
 
-//        Spinner spinner = (Spinner)findViewById(R.id.spinner2);
-
-//        l.photosOrVideos = spinner.getSelectedItem().toString();
-
-        //System.out.println(l.photosOrVideos);
-
-
-        EditText timeLimit = (EditText)findViewById(R.id.time_limit);
-        EditText correctness = (EditText)findViewById(R.id.correctness);
-        EditText sublevels = (EditText)findViewById(R.id.sublevels);
-        EditText levelName = (EditText)findViewById(R.id.level_name);
-        EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
+        EditText timeLimit = (EditText) findViewById(R.id.time_limit);
+        EditText correctness = (EditText) findViewById(R.id.correctness);
+        EditText sublevels = (EditText) findViewById(R.id.sublevels);
+        EditText levelName = (EditText) findViewById(R.id.level_name);
+        EditText vpPerLevel = (EditText) findViewById(R.id.pv_per_level);
 
         l.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
         l.setPvPerLevel(Integer.parseInt(vpPerLevel.getText() + ""));
@@ -316,7 +298,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         l.setName(levelName.getText().toString());
 
-        if(editedLevelId > 0){
+        if (editedLevelId > 0) {
             l.setId(editedLevelId);
 
 
@@ -327,35 +309,24 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         l.setPhotosOrVideosList(photosOrVideosList);
-
-        // przerabiamy te dlugie id na krotkie
-
-//        for(Integer photoPath : photosOrVideosList){
-//
-//            Cursor pp = sqlm.givePhotoWithPath(Integer.toString(photoPath));
-//            pp.moveToFirst();
-//            int realId = pp.getInt(pp.getColumnIndex("id"));
-//            l.photosOrVideosList.add(realId);
-//
-//        }
-
-
-
-
-
         l.setEmotions(emotionsIdsList);
 
+        LevelValidator levelValidator = new LevelValidator(l);
+        if (levelValidator.validateLevel()){
 
+            sqlm.addLevel(l);
+            final TextView msg = (TextView) findViewById(R.id.saveMessage);
+            msg.setVisibility(View.VISIBLE);
+            msg.postDelayed(new Runnable() {
+                public void run() {
+                    msg.setVisibility(View.INVISIBLE);
+                }
+            }, 2000);
 
-        sqlm.addLevel(l);
-
-        final TextView msg = (TextView)findViewById(R.id.saveMessage);
-        msg.setVisibility(View.VISIBLE);
-        msg.postDelayed(new Runnable() {
-            public void run() {
-                msg.setVisibility(View.INVISIBLE);
-            }
-        }, 2000);
+        }
+        else{
+            // do nothing (for now)
+        }
 
     }
 

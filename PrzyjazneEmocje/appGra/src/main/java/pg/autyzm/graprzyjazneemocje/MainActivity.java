@@ -1,21 +1,15 @@
 package pg.autyzm.graprzyjazneemocje;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -26,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.provider.MediaStore.Images.Media;
-import android.support.v7.app.AppCompatDelegate;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,9 +36,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     int sublevelsLeft;
     List<Integer> sublevelsList;
 
-    List<String> photosListWithEmotionSelected;
-    List<String> photosListWithRestOfEmotions;
-    List<String> selectedPhotosListWithRestOfEmotions;
+    List<String> photosWithEmotionSelected;
+    List<String> photosWithRestOfEmotions;
+    List<String> photosToUseInSublevel;
     String goodAnswer;
     Cursor cur0;
     SqlliteManager sqlm;
@@ -84,7 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         findNextActiveLevel();
 
-        generateView(selectedPhotosListWithRestOfEmotions);
+        generateView(photosToUseInSublevel);
         System.out.println("Wygenerowano view");
 
         //JG
@@ -113,9 +106,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             // zaraz zostanie zaladowany nowy poziom (skonczyly sie podpoziomy. trzeba ustalic, czy dziecko odpowiedzialo wystarczajaco dobrze, by przejsc dalej
 
-
-
-
             while(cur0.moveToNext()){
 
                 if(! loadLevel()){
@@ -124,18 +114,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 else{
                     return true;
                 }
-
-
-
             }
 
             return false;
 
         }
-
-
-
-
 
         boolean loadLevel(){
 
@@ -208,19 +191,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     void generateSublevel(int emotionIndexInList){
 
 
-
-        //System.out.println("Wybrana emocja indeks " + emotionIndexInList);
-        //System.out.println("Wybrana emocja id " + l.emotions.get(emotionIndexInList));
         Cursor emotionCur = sqlm.giveEmotionName(emotionIndexInList);
 
         emotionCur.moveToFirst();
         String selectedEmotionName = emotionCur.getString(emotionCur.getColumnIndex("emotion"));
-        //System.out.println("Wybrana emocja name " + selectedEmotionName);
         // po kolei czytaj nazwy emocji wybranych zdjec, jesli ich emocja = wybranej emocji, idzie do listy a, jesli nie, lista b
 
-        photosListWithEmotionSelected = new ArrayList<String>();
-        photosListWithRestOfEmotions = new ArrayList<String>();
-        selectedPhotosListWithRestOfEmotions = new ArrayList<String>();
+        photosWithEmotionSelected = new ArrayList<String>();
+        photosWithRestOfEmotions = new ArrayList<String>();
+        photosToUseInSublevel = new ArrayList<String>();
 
 
 
@@ -239,10 +218,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             //System.out.println(photoEmotionName + " " + selectedEmotionName);
 
             if(photoEmotionName.equals(selectedEmotionName)){
-                photosListWithEmotionSelected.add(photoName);
+                photosWithEmotionSelected.add(photoName);
             }
             else{
-                photosListWithRestOfEmotions.add(photoName);
+                photosWithRestOfEmotions.add(photoName);
 
             }
 
@@ -257,11 +236,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectPhotoWithNotSelectedEmotions(l.getPvPerLevel());
 
         // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
-        // do zrobienia - by nie zawsze poprawna odpowiedz byla na koncu
 
-        selectedPhotosListWithRestOfEmotions.add(goodAnswer);
+        photosToUseInSublevel.add(goodAnswer);
 
-        java.util.Collections.shuffle(selectedPhotosListWithRestOfEmotions);
+        java.util.Collections.shuffle(photosToUseInSublevel);
 
 
         // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
@@ -462,25 +440,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         Random rand = new Random();
 
-        int photoWithSelectedEmotionIndex = rand.nextInt(photosListWithEmotionSelected.size());
+        int photoWithSelectedEmotionIndex = rand.nextInt(photosWithEmotionSelected.size());
 
-        String name = photosListWithEmotionSelected.get(photoWithSelectedEmotionIndex);
+        String name = photosWithEmotionSelected.get(photoWithSelectedEmotionIndex);
 
         return name;
     }
 
     void selectPhotoWithNotSelectedEmotions(int howMany){
 
+        Random rand = new Random();
+
         for(int i = 0; i < howMany - 1; i++) {
 
-            Random rand = new Random();
+            if(photosWithRestOfEmotions.size() > 0){
+                int photoWithSelectedEmotionIndex = rand.nextInt(photosWithRestOfEmotions.size());
+                String name = photosWithRestOfEmotions.get(photoWithSelectedEmotionIndex);
 
-            int photoWithSelectedEmotionIndex = rand.nextInt(photosListWithRestOfEmotions.size());
-
-            String name = photosListWithRestOfEmotions.get(photoWithSelectedEmotionIndex);
-
-            selectedPhotosListWithRestOfEmotions.add(name);
-            photosListWithRestOfEmotions.remove(name);
+                photosToUseInSublevel.add(name);
+                photosWithRestOfEmotions.remove(name);
+            }
 
         }
     }
@@ -497,7 +476,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     startEndActivity(true);
                 }
 
-                generateView(selectedPhotosListWithRestOfEmotions);
+                generateView(photosToUseInSublevel);
                 System.out.println("Wygenerowano view");
 
                 break;
