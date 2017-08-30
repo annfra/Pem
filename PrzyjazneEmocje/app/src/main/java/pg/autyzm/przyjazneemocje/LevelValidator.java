@@ -28,7 +28,7 @@ public class LevelValidator {
             return false;
         }
         if(everyEmotionHasAtLestOnePhoto()){
-            return false;
+            return true;
         }
         else {
             return true;

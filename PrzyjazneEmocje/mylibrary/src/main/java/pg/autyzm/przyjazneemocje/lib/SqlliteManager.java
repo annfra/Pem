@@ -27,6 +27,14 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
         db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
 
+
+        addEmotion("happy");
+        addEmotion("sad");
+        addEmotion("angry");
+        addEmotion("scared");
+        addEmotion("surprised");
+        addEmotion("bored");
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)

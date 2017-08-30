@@ -40,17 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
-
-
-        sqlm.cleanTable("emotions");
-        //na sztywno dodajemy?
-        sqlm.addEmotion("happy");
-        sqlm.addEmotion("sad");
-        sqlm.addEmotion("angry");
-        sqlm.addEmotion("scared");
-        sqlm.addEmotion("surprised");
-        sqlm.addEmotion("bored");
-
         File createDir = new File(root + "Emotions" + File.separator);
         if (!createDir.exists()) {
             createDir.mkdir();
