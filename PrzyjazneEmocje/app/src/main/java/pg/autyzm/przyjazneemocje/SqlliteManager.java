@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class SqlliteManager extends SQLiteOpenHelper {
@@ -60,32 +59,32 @@ public class SqlliteManager extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("photos_or_videos",level.photosOrVideos);
-        values.put("name",level.name);
-        values.put("photos_or_videos_per_level",level.pvPerLevel);
-        values.put("time_limit",level.timeLimit);
-        values.put("is_level_active", level.isLevelActive);
-        values.put("correctness",level.correctness);
-        values.put("sublevels", level.sublevels);
+        values.put("photos_or_videos", level.getPhotosOrVideos());
+        values.put("name", level.getName());
+        values.put("photos_or_videos_per_level", level.getPvPerLevel());
+        values.put("time_limit", level.getTimeLimit());
+        values.put("is_level_active", level.isLevelActive());
+        values.put("correctness", level.getCorrectness());
+        values.put("sublevels", level.getSublevels());
 
 
-        if(level.id != 0) {
+        if(level.getId() != 0) {
             //values.put("id", level.id);
-            System.out.println("Update, time limit " + level.timeLimit);
-            db.update("levels", values, "id=" + level.id, null);
+            System.out.println("Update, time limit " + level.getTimeLimit());
+            db.update("levels", values, "id=" + level.getId(), null);
 
             /*
                 usunac wszystkie rekordy polaczone z tym poziomem.
 
             */
 
-            delete("levels_photos", "levelid", String.valueOf(level.id));
-            delete("levels_emotions", "levelid", String.valueOf(level.id));
+            delete("levels_photos", "levelid", String.valueOf(level.getId()));
+            delete("levels_emotions", "levelid", String.valueOf(level.getId()));
 
         }
         else {
             long longId = db.insertOrThrow("levels", null, values);
-            level.id = (int) longId;
+            level.setId((int) longId);
         }
 
         // Dodaj rekordy wiele do wielu ze zdjeciami/video
@@ -97,32 +96,32 @@ public class SqlliteManager extends SQLiteOpenHelper {
         wyswietlenie co jest w obiekcie level przed jego zapisaniem do bazy danych
 
          */
-        System.out.println("Level name " + level.name);
-        System.out.println("Is level active " + level.isLevelActive);
-        System.out.println("Time limit " + level.timeLimit);
-        System.out.println("Photos per level " + level.pvPerLevel);
-        System.out.println("Photos or videos " + level.photosOrVideos);
+        System.out.println("Level name " + level.getName());
+        System.out.println("Is level active " + level.isLevelActive());
+        System.out.println("Time limit " + level.getTimeLimit());
+        System.out.println("Photos per level " + level.getPvPerLevel());
+        System.out.println("Photos or videos " + level.getPhotosOrVideos());
 
 
-        for(Integer photoOrVideo : level.photosOrVideosList){
+        for(Integer photoOrVideo : level.getPhotosOrVideosList()){
 
 
             System.out.println("Photo id " + photoOrVideo);
 
             values = new ContentValues();
-            values.put("levelid",level.id);
+            values.put("levelid", level.getId());
             values.put("photoid",photoOrVideo);
 
             db.insertOrThrow("levels_photos", null, values);
         }
 
-        for(Integer emotion : level.emotions){
+        for(Integer emotion : level.getEmotions()){
 
 
             System.out.println("Emotion id " + emotion);
 
             values = new ContentValues();
-            values.put("levelid",level.id);
+            values.put("levelid", level.getId());
             values.put("emotionid",emotion);
 
             db.insertOrThrow("levels_emotions", null, values);

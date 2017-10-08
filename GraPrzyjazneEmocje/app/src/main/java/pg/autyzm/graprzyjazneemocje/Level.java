@@ -10,47 +10,47 @@ import java.util.List;
  */
 public class Level {
 
-    int id;
+    private int id;
 
-    String photosOrVideos;
-    int timeLimit;
-    int pvPerLevel;
-    boolean isLevelActive;
-    int sublevels;
-    int correctness;
+    private String photosOrVideos;
+    private int timeLimit;
+    private int pvPerLevel;
+    private boolean isLevelActive;
+    private int sublevels;
+    private int correctness;
 
-    String name;
+    private String name;
 
-    List<Integer> photosOrVideosList;
-    List<Integer> emotions;
+    private List<Integer> photosOrVideosList;
+    private List<Integer> emotions;
 
 
 
 
     public Level(Cursor cur, Cursor cur2, Cursor cur3){
 
-        photosOrVideosList = new ArrayList<Integer>();
-        emotions = new ArrayList<Integer>();
+        setPhotosOrVideosList(new ArrayList<Integer>());
+        setEmotions(new ArrayList<Integer>());
 
         while(cur.moveToNext())
         {
-            id = cur.getInt(cur.getColumnIndex("id"));
-            photosOrVideos = cur.getString(cur.getColumnIndex("photos_or_videos"));
-            timeLimit = cur.getInt(cur.getColumnIndex("time_limit"));
-            pvPerLevel = cur.getInt(cur.getColumnIndex("photos_or_videos_per_level"));
+            setId(cur.getInt(cur.getColumnIndex("id")));
+            setPhotosOrVideos(cur.getString(cur.getColumnIndex("photos_or_videos")));
+            setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
+            setPvPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
 
-            correctness = cur.getInt(cur.getColumnIndex("correctness"));
-            sublevels = cur.getInt(cur.getColumnIndex("sublevels"));
+            setCorrectness(cur.getInt(cur.getColumnIndex("correctness")));
+            setSublevels(cur.getInt(cur.getColumnIndex("sublevels")));
 
-            isLevelActive = (active != 0);
-            name = cur.getString(cur.getColumnIndex("name"));
+            setLevelActive((active != 0));
+            setName(cur.getString(cur.getColumnIndex("name")));
         }
 
         if(cur2 != null){
 
             while(cur2.moveToNext()){
-                photosOrVideosList.add(cur2.getInt(cur2.getColumnIndex("photoid")));
+                getPhotosOrVideosList().add(cur2.getInt(cur2.getColumnIndex("photoid")));
 
             }
         }
@@ -61,7 +61,7 @@ public class Level {
 
             while(cur3.moveToNext()){
 
-                emotions.add(cur3.getInt(cur3.getColumnIndex("emotionid")));
+                getEmotions().add(cur3.getInt(cur3.getColumnIndex("emotionid")));
                 System.out.println("+++++" + cur3.getInt(cur3.getColumnIndex("emotionid")));
 
             }
@@ -72,13 +72,92 @@ public class Level {
 
     public Level(){
 
-        photosOrVideosList = new ArrayList<Integer>();
-        emotions = new ArrayList<Integer>();
+        setPhotosOrVideosList(new ArrayList<Integer>());
+        setEmotions(new ArrayList<Integer>());
 
-        isLevelActive = true;
-        id = 0;
+        setLevelActive(true);
+        setId(0);
 
     }
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPhotosOrVideos() {
+        return photosOrVideos;
+    }
+
+    public void setPhotosOrVideos(String photosOrVideos) {
+        this.photosOrVideos = photosOrVideos;
+    }
+
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public int getPvPerLevel() {
+        return pvPerLevel;
+    }
+
+    public void setPvPerLevel(int pvPerLevel) {
+        this.pvPerLevel = pvPerLevel;
+    }
+
+    public boolean isLevelActive() {
+        return isLevelActive;
+    }
+
+    public void setLevelActive(boolean levelActive) {
+        isLevelActive = levelActive;
+    }
+
+    public int getSublevels() {
+        return sublevels;
+    }
+
+    public void setSublevels(int sublevels) {
+        this.sublevels = sublevels;
+    }
+
+    public int getCorrectness() {
+        return correctness;
+    }
+
+    public void setCorrectness(int correctness) {
+        this.correctness = correctness;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Integer> getPhotosOrVideosList() {
+        return photosOrVideosList;
+    }
+
+    public void setPhotosOrVideosList(List<Integer> photosOrVideosList) {
+        this.photosOrVideosList = photosOrVideosList;
+    }
+
+    public List<Integer> getEmotions() {
+        return emotions;
+    }
+
+    public void setEmotions(List<Integer> emotions) {
+        this.emotions = emotions;
+    }
 }
