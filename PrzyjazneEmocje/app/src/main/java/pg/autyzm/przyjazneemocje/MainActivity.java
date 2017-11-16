@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sqlm = new SqlliteManager(this,"przyjazneemocje");
+        sqlm = getInstance(this);
 
         updateLevelList();
         //generate list

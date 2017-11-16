@@ -30,6 +30,8 @@ import java.util.Random;
 import pg.autyzm.przyjazneemocje.lib.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
+import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -67,7 +69,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-        sqlm = new SqlliteManager(this, "przyjazneemocje");
+        sqlm = getInstance(this);
 
         sqlm.getReadableDatabase();
 

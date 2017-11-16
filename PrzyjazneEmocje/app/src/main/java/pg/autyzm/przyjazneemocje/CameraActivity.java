@@ -16,6 +16,8 @@ import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
+import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+
 /**
  * Created by Ann on 13.11.2016.
  */
@@ -52,7 +54,7 @@ public class CameraActivity extends Activity {
 
     private String getFileName(String emotionLang)
     {
-        SqlliteManager sqlm = new SqlliteManager(this,"przyjazneemocje");
+        SqlliteManager sqlm = getInstance(this);
         Map<String, String> mapEmo = new ArrayMap<>();
         mapEmo.put(getResources().getString(R.string.emotion_happy), "happy");
         mapEmo.put(getResources().getString(R.string.emotion_sad), "sad");

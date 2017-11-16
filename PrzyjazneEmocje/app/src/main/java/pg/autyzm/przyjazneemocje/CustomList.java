@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import pg.autyzm.przyjazneemocje.lib.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
+import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+
 public class CustomList extends BaseAdapter implements ListAdapter {
     private ArrayList<String> list = new ArrayList<String>();
     private ArrayList<Boolean> active_list = new ArrayList<Boolean>();
@@ -29,7 +31,7 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         this.list = list;
         this.active_list = active_list;
         this.context = context;
-        sqlm = new SqlliteManager(context,"przyjazneemocje");
+        sqlm = getInstance(context);
     }
 
     @Override

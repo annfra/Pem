@@ -23,6 +23,8 @@ import pg.autyzm.przyjazneemocje.chooseImages.ChooseImages;
 import pg.autyzm.przyjazneemocje.lib.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
+import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
+
 public class LevelConfiguration extends AppCompatActivity implements View.OnClickListener{
 
 
@@ -50,7 +52,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         //this.deleteDatabase("friendly_emotions.db");
 
-        sqlm = new SqlliteManager(this,"przyjazneemocje");
+        sqlm = getInstance(this);
 
         Map<String, String> mapEmo = new ArrayMap<>();
         mapEmo.put("happy",getResources().getString(R.string.emotion_happy));

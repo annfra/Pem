@@ -11,20 +11,31 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SqlliteManager extends SQLiteOpenHelper {
 
+    private static SqlliteManager sInstance;
+
+    private static final String DATABASE_NAME = "przyjazneemocje";
+
 
     private SQLiteDatabase db;
 
-    public SQLiteDatabase getWritableDatabase(){
-        if(db == null)
-            db = super.getWritableDatabase();
 
-        return db;
+
+    public static synchronized SqlliteManager getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new SqlliteManager(context.getApplicationContext());
+        }
+        return sInstance;
     }
 
 
-    public SqlliteManager (final Context context, String databaseName)
+    private SqlliteManager (final Context context)
     {
-        super(new DatabaseContext(context), databaseName, null, 2);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 2);
+        db = getWritableDatabase();
     }
 
     public void onCreate(SQLiteDatabase db)
@@ -50,6 +61,12 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     }
 
+    public void onOpen(SQLiteDatabase db){
+
+        this.db = db;
+
+    }
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
 
@@ -64,8 +81,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void addPhoto(int path, String emotion, String fileName)
     {
-
-        //System.out.println("path " + path);
         ContentValues values = new ContentValues();
         values.put("path",path);
         values.put("emotion",emotion);
@@ -135,7 +150,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void delete(String tableName, String columnName, String value)
     {
-        SQLiteDatabase db = getWritableDatabase();
         String[] args = {"" + value};
         db.delete(tableName, columnName + "=?",args);
     }
@@ -149,7 +163,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor givePhotosWithEmotion(String emotion)
     {
         String[] columns = {"id", "path", "emotion", "name"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("photos", columns,"emotion like " + "'%" + emotion + "%'", null, null, null, null);
         return cursor;
     }
@@ -157,7 +170,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor givePhotoWithPath(String path)
     {
         String[] columns = {"id", "path", "emotion", "name"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("photos", columns,"path like " + "'%" + path + "%'", null, null, null, null);
         return cursor;
     }
@@ -165,7 +177,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor givePhotoWithId(int id)
     {
         String[] columns = {"id", "path", "emotion", "name"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("photos", columns,"id like " + "'%" + id + "%'", null, null, null, null);
         return cursor;
     }
@@ -173,7 +184,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor givePhotosInLevel(int levelId)
     {
         String[] columns = {"id", "levelid", "photoid"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("levels_photos", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
         return cursor;
     }
@@ -182,7 +192,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor giveEmotionsInLevel(int levelId)
     {
         String[] columns = {"id", "levelid", "emotionid"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("levels_emotions", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
         return cursor;
     }
@@ -191,7 +200,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor giveEmotionId(String name){
 
         String[] columns = {"id", "emotion"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("emotions", columns,"emotion like " + "'%" + name + "%'", null, null, null, null);
         return cursor;
 
@@ -200,7 +208,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor giveEmotionName(int id){
 
         String[] columns = {"id", "emotion"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("emotions", columns,"id like " + "'%" + id + "%'", null, null, null, null);
         return cursor;
 
@@ -209,7 +216,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor giveAllEmotions()
     {
         String[] columns = {"id","emotion"};//"photos_or_videos", "photos_or_videos_per", "time_limit"
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("emotions", columns,null, null, null, null, null);
         return cursor;
     }
@@ -217,7 +223,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor giveAllLevels()
     {
         String[] columns = {"id", "photos_or_videos", "is_level_active", "name"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("levels", columns,null, null, null, null, null);
 
         return cursor;
@@ -226,7 +231,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public Cursor giveLevel(int id)
     {
         String[] columns = {"id", "photos_or_videos"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("levels", columns,null, null, null, null, null);
 
 
@@ -240,7 +244,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
     public String giveNameOfEmotionFromPhoto(String nameOfPhoto)
     {
         String[] columns = {"id", "path", "emotion", "name"};
-        SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.query("photos", columns,null, null, null, null, null);
         while(cursor.moveToNext()) {
             String name = cursor.getString(3);
