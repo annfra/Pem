@@ -150,6 +150,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void delete(String tableName, String columnName, String value)
     {
+        SQLiteDatabase db = getWritableDatabase();
         String[] args = {"" + value};
         db.delete(tableName, columnName + "=?",args);
     }

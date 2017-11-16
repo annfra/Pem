@@ -70,7 +70,6 @@ public class CustomList extends BaseAdapter implements ListAdapter {
         CheckBox activeChck = (CheckBox) view.findViewById(R.id.active_chck);
 
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + active_list.get(position));
         activeChck.setChecked(active_list.get(position));
 
 
