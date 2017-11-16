@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.chooseImages.ChooseImages;
-import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;

@@ -1,6 +1,10 @@
-package pg.autyzm.przyjazneemocje.lib;
+package pg.autyzm.przyjazneemocje.lib.entities;
 
 import android.database.Cursor;
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,23 +12,33 @@ import java.util.List;
 /**
  * Created by Ann on 25.10.2016.
  */
+@DatabaseTable(tableName = "levels")
 public class Level {
 
+    @DatabaseField(generatedId=true)
     private int id;
-
+    @DatabaseField
     private String photosOrVideos;
+    @DatabaseField
     private int timeLimit;
+    @DatabaseField
     private int pvPerLevel;
+    @DatabaseField
     private boolean isLevelActive;
+    @DatabaseField
     private int sublevels;
+    @DatabaseField
     private int correctness;
-
+    @DatabaseField
     private String name;
 
-    private List<Integer> photosOrVideosList;
-    private List<Integer> emotions;
+    @ForeignCollectionField
+    private List<LevelsEmotions> levelsEmotionsList;
+    @ForeignCollectionField
+    private List<LevelsPhotos> levelsPhotosList;
 
-
+    private List<Emotion> emotionsList;
+    private List<Photo> photosOrVideosList;
 
 
     public Level(Cursor cur, Cursor cur2, Cursor cur3){
@@ -143,19 +157,19 @@ public class Level {
         this.name = name;
     }
 
-    public List<Integer> getPhotosOrVideosList() {
+    public List<Photo> getPhotosOrVideosList() {
         return photosOrVideosList;
     }
 
-    public void setPhotosOrVideosList(List<Integer> photosOrVideosList) {
+    public void setPhotosOrVideosList(List<Photo> photosOrVideosList) {
         this.photosOrVideosList = photosOrVideosList;
     }
 
-    public List<Integer> getEmotions() {
-        return emotions;
+    public List<Emotion> getEmotions() {
+        return emotionsList;
     }
 
-    public void setEmotions(List<Integer> emotions) {
-        this.emotions = emotions;
+    public void setEmotions(List<Emotion> emotions) {
+        this.emotionsList = emotions;
     }
 }

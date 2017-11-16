@@ -1,6 +1,6 @@
 package pg.autyzm.przyjazneemocje;
 
-import pg.autyzm.przyjazneemocje.lib.Level;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
 /**
  * Created by user on 26.08.2017.
