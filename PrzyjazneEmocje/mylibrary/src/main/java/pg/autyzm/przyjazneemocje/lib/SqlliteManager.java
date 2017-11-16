@@ -3,13 +3,26 @@ package pg.autyzm.przyjazneemocje.lib;
 /**
  * Created by Ann on 26.09.2016.
  */
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.j256.ormlite.android.AndroidConnectionSource;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import pg.autyzm.przyjazneemocje.lib.entities.Emotion;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
+import pg.autyzm.przyjazneemocje.lib.entities.LevelsEmotions;
+import pg.autyzm.przyjazneemocje.lib.entities.LevelsPhotos;
+import pg.autyzm.przyjazneemocje.lib.entities.Photo;
+
 
 public class SqlliteManager extends SQLiteOpenHelper {
 
@@ -17,7 +30,9 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "przyjazneemocje";
 
-
+    private Dao<Level,Integer> levelDao;
+    private Dao<Emotion,Integer> emotionDao;
+    private Dao<Photo,Integer> photoDao;
     private SQLiteDatabase db;
 
 
@@ -46,26 +61,45 @@ public class SqlliteManager extends SQLiteOpenHelper {
         this.db = db;
 
         System.out.println("Tworze tablee");
-        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
-        db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
-        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
-                "time_limit int, is_level_active boolean, name text, correctness int, sublevels int);" + "");
-        db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
-        db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
+        ConnectionSource connectionSource =
+                new AndroidConnectionSource(this);
 
+        try {
+            TableUtils.createTable(connectionSource, Level.class);
+            TableUtils.createTable(connectionSource, Photo.class);
+            TableUtils.createTable(connectionSource, Emotion.class);
+            TableUtils.createTable(connectionSource, LevelsPhotos.class);
+            TableUtils.createTable(connectionSource, LevelsEmotions.class);
 
-        addEmotion("happy");
-        addEmotion("sad");
-        addEmotion("angry");
-        addEmotion("scared");
-        addEmotion("surprised");
-        addEmotion("bored");
+            addEmotion("happy");
+            addEmotion("sad");
+            addEmotion("angry");
+            addEmotion("scared");
+            addEmotion("surprised");
+            addEmotion("bored");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
     public void onOpen(SQLiteDatabase db){
 
         this.db = db;
+
+        // initialize daos
+        ConnectionSource connectionSource =
+                new AndroidConnectionSource(this);
+        try {
+            levelDao = DaoManager.createDao(connectionSource, Level.class);
+            emotionDao = DaoManager.createDao(connectionSource, Emotion.class);
+            photoDao = DaoManager.createDao(connectionSource, Photo.class);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -74,184 +108,126 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     }
 
-    public void addEmotion(String emotion)
-    {
-        ContentValues values = new ContentValues();
-        values.put("emotion",emotion);
-        System.out.println(db.insertOrThrow("emotions", null, values) + " addEmotion");
-    }
-
-    public void addPhoto(int path, String emotion, String fileName)
-    {
-        ContentValues values = new ContentValues();
-        values.put("path",path);
-        values.put("emotion",emotion);
-        values.put("name",fileName);
-        db.insertOrThrow("photos", null, values);
-    }
-
-
-    public void addLevel(Level level)
-    {
-        ContentValues values = new ContentValues();
-        values.put("photos_or_videos", level.getPhotosOrVideos());
-        values.put("name", level.getName());
-        values.put("photos_or_videos_per_level", level.getPvPerLevel());
-        values.put("time_limit", level.getTimeLimit());
-        values.put("is_level_active", level.isLevelActive());
-        values.put("correctness", level.getCorrectness());
-        values.put("sublevels", level.getSublevels());
-
-
-        if(level.getId() != 0) {
-            //values.put("id", level.id);
-            db.update("levels", values, "id=" + level.getId(), null);
-
-            /*
-                usunac wszystkie rekordy polaczone z tym poziomem.
-
-            */
-
-            delete("levels_photos", "levelid", String.valueOf(level.getId()));
-            delete("levels_emotions", "levelid", String.valueOf(level.getId()));
-
+    public void addEmotion(String emotion){
+        try {
+            emotionDao.create(new Emotion(emotion));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        else {
-            long longId = db.insertOrThrow("levels", null, values);
-            level.setId((int) longId);
+    }
+
+    public void addPhoto(int path, String emotion, String fileName){
+        try {
+            photoDao.create(new Photo(path, emotion, fileName));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteLevel(int id){
+        try {
+            levelDao.deleteById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void cleanPhotosTable() {
+        ConnectionSource connectionSource =
+                new AndroidConnectionSource(this);
+
+        try {
+            TableUtils.clearTable(connectionSource, Photo.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Photo> givePhotosWithEmotion(String emotion){
+        List<Photo> photos = new ArrayList<>();
+        try {
+            photos.addAll(photoDao.queryForEq("emotion", emotion));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return photos;
+    }
+
+    public Photo givePhotoWithPath(String path){
+        try {
+            return photoDao.queryForEq("path", path).get(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Photo givePhotoWithId(int id){
+        try {
+            return photoDao.queryForId(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int giveEmotionId(String name){
+        try {
+            return emotionDao.queryForEq("name", name).get(0).getId();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public String giveEmotionName(int id){
+        try {
+            return emotionDao.queryForId(id).getEmotion();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Emotion> giveAllEmotions(){
+
+        List<Emotion> emotions = new ArrayList<>();
+
+        try {
+            emotions.addAll(emotionDao.queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        // Dodaj rekordy wiele do wielu ze zdjeciami/video
+        return emotions;
+    }
 
-        for(Integer photoOrVideo : level.getPhotosOrVideosList()){
-
-
-            System.out.println("Photo id " + photoOrVideo);
-
-            values = new ContentValues();
-            values.put("levelid", level.getId());
-            values.put("photoid",photoOrVideo);
-
-            db.insertOrThrow("levels_photos", null, values);
+    public List<Level> giveAllLevels(){
+        List<Level> levels = new ArrayList<>();
+        try {
+            levels.addAll(levelDao.queryForAll());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return levels;
+    }
 
-        for(Integer emotion : level.getEmotions()){
-
-
-            System.out.println("Emotion id " + emotion);
-
-            values = new ContentValues();
-            values.put("levelid", level.getId());
-            values.put("emotionid",emotion);
-
-            db.insertOrThrow("levels_emotions", null, values);
+    public Level giveLevel(int id){
+        try {
+            return levelDao.queryForId(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-
+        return null;
     }
 
-    public void delete(String tableName, String columnName, String value)
-    {
-        String[] args = {"" + value};
-        db.delete(tableName, columnName + "=?",args);
-    }
-
-    public void cleanTable(String tableName)
-    {
-        db.execSQL("delete from "+ tableName);
-        db.execSQL("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='" + tableName +"'");
-    }
-
-    public Cursor givePhotosWithEmotion(String emotion)
-    {
-        String[] columns = {"id", "path", "emotion", "name"};
-        Cursor cursor = db.query("photos", columns,"emotion like " + "'%" + emotion + "%'", null, null, null, null);
-        return cursor;
-    }
-
-    public Cursor givePhotoWithPath(String path)
-    {
-        String[] columns = {"id", "path", "emotion", "name"};
-        Cursor cursor = db.query("photos", columns,"path like " + "'%" + path + "%'", null, null, null, null);
-        return cursor;
-    }
-
-    public Cursor givePhotoWithId(int id)
-    {
-        String[] columns = {"id", "path", "emotion", "name"};
-        Cursor cursor = db.query("photos", columns,"id like " + "'%" + id + "%'", null, null, null, null);
-        return cursor;
-    }
-
-    public Cursor givePhotosInLevel(int levelId)
-    {
-        String[] columns = {"id", "levelid", "photoid"};
-        Cursor cursor = db.query("levels_photos", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
-        return cursor;
-    }
-
-
-    public Cursor giveEmotionsInLevel(int levelId)
-    {
-        String[] columns = {"id", "levelid", "emotionid"};
-        Cursor cursor = db.query("levels_emotions", columns,"levelid like " + "'%" + levelId + "%'", null, null, null, null);
-        return cursor;
-    }
-
-
-    public Cursor giveEmotionId(String name){
-
-        String[] columns = {"id", "emotion"};
-        Cursor cursor = db.query("emotions", columns,"emotion like " + "'%" + name + "%'", null, null, null, null);
-        return cursor;
-
-    }
-
-    public Cursor giveEmotionName(int id){
-
-        String[] columns = {"id", "emotion"};
-        Cursor cursor = db.query("emotions", columns,"id like " + "'%" + id + "%'", null, null, null, null);
-        return cursor;
-
-    }
-
-    public Cursor giveAllEmotions()
-    {
-        String[] columns = {"id","emotion"};//"photos_or_videos", "photos_or_videos_per", "time_limit"
-        Cursor cursor = db.query("emotions", columns,null, null, null, null, null);
-        return cursor;
-    }
-
-    public Cursor giveAllLevels()
-    {
-        String[] columns = {"id", "photos_or_videos", "is_level_active", "name"};
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
-
-        return cursor;
-    }
-
-    public Cursor giveLevel(int id)
-    {
-        String[] columns = {"id", "photos_or_videos"};
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
-
-
-        cursor =  db.rawQuery("select * from levels where id='" + id + "'" , null);
-
-
-        return cursor;
-    }
-
-
-    public String giveNameOfEmotionFromPhoto(String nameOfPhoto)
-    {
-        String[] columns = {"id", "path", "emotion", "name"};
-        Cursor cursor = db.query("photos", columns,null, null, null, null, null);
-        while(cursor.moveToNext()) {
-            String name = cursor.getString(3);
-            if(name.equals(nameOfPhoto))
-                return cursor.getString(2);
+    public void addLevel(Level l){
+        try {
+            levelDao.create(l);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return "Fail";
     }
+
+
 }

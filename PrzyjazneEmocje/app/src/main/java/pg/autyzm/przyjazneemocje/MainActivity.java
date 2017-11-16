@@ -14,8 +14,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.entities.Emotion;
+import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         updateLevelList();
         //generate list
 
-        sqlm.cleanTable("photos"); //TODO not clean and add, but only update
+        sqlm.cleanPhotosTable(); //TODO not clean and add, but only update
 
         String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
             for (Field f : drawables) {
                 try {
-                    if (IfConstainsEmotionName(f.getName()))
+                    if (ifConstainsEmotionName(f.getName()))
                     {
                         String emotName = f.getName();
                         int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
@@ -109,14 +112,16 @@ public class MainActivity extends AppCompatActivity {
         
     }
 
-    public boolean IfConstainsEmotionName(String inputString)
+    public boolean ifConstainsEmotionName(String inputString)
     {
-        Cursor cur = sqlm.giveAllEmotions();
-        while(cur.moveToNext()) {
-            String emotion = cur.getString(1);
-            if(inputString.contains(emotion))
+
+        List<Emotion> emotions = sqlm.giveAllEmotions();
+
+        for(Emotion e : emotions){
+            if(inputString.contains(e.getEmotion()))
                 return true;
         }
+
         return false;
     }
 
@@ -135,24 +140,18 @@ public class MainActivity extends AppCompatActivity {
     public void updateLevelList(){
 
 
-        Cursor cur = sqlm.giveAllLevels();
+        List<Level> levels = sqlm.giveAllLevels();
         list = new ArrayList<String>();
         active_list = new ArrayList<Boolean>();
 
-        while(cur.moveToNext())
+        for(Level l : levels)
         {
-
-            String name = cur.getString(cur.getColumnIndex("name"));
-
-            String levelId = cur.getInt(0) + " " + name;
-            //String levelId = "Level " + cur.getInt(0);
-
-            int active = cur.getInt(cur.getColumnIndex("is_level_active"));
-            boolean isLevelActive = (active != 0);
-            active_list.add(isLevelActive);
-
-
+            String name = l.getName();
+            String levelId = l.getId() + " " + name;
             list.add(levelId);
+
+            boolean isLevelActive = l.isLevelActive();
+            active_list.add(isLevelActive);
 
         }
 

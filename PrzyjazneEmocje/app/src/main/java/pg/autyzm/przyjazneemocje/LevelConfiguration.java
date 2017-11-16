@@ -2,6 +2,8 @@ package pg.autyzm.przyjazneemocje;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,8 +22,10 @@ import java.util.List;
 import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.chooseImages.ChooseImages;
+import pg.autyzm.przyjazneemocje.lib.entities.Emotion;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.entities.Photo;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
@@ -36,6 +40,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
     ArrayList<Integer> photosOrVideosList = new ArrayList<Integer>();
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +50,6 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         int value = -1; // or other values
         if(b != null)
             value = b.getInt("key");
-        System.out.println(value + " to zostalo przekazane do konfiguracji");
 
 
        // TextView textPhotos = (TextView) findViewById(R.id.photos);
@@ -63,17 +67,17 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         mapEmo.put("bored",getResources().getString(R.string.emotion_bored));
 
 
-        Cursor cur = sqlm.giveAllEmotions();
-        while(cur.moveToNext())
+        List<Emotion> emotions = sqlm.giveAllEmotions();
+        for(Emotion e : emotions)
         {
 
-            String emotionId = "emotion" + cur.getInt(0);
+            String emotionId = "emotion" + e.getId();
 
             int resID = getResources().getIdentifier(emotionId, "id", getPackageName());
             if(resID == 0) break;
 
             CheckBox checkBox = (CheckBox)findViewById(resID);
-            checkBox.setText(mapEmo.get(cur.getString(1)));
+            checkBox.setText(mapEmo.get(e.getEmotion()));
             checkBox.setOnCheckedChangeListener(new myCheckBoxChnageClicker());
         }
 
@@ -118,11 +122,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
         editedLevelId = value;
 
-        Cursor cur2 = sqlm.giveLevel(editedLevelId);
-        Cursor cur3 = sqlm.givePhotosInLevel(editedLevelId);
-        Cursor cur4 = sqlm.giveEmotionsInLevel(editedLevelId);
+        Level l = sqlm.giveLevel(editedLevelId);
 
-        l = new Level(cur2, cur3, cur4);
 
         EditText timeLimit = (EditText)findViewById(R.id.time_limit);
         EditText vpPerLevel = (EditText)findViewById(R.id.pv_per_level);
@@ -196,6 +197,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     {
 
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
         {
@@ -238,8 +240,8 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
     private void removeImgEmo(String emotion) {
-        Cursor cursor = sqlm.givePhotosWithEmotion(emotion);
-        while(cursor.moveToNext()) {
+        List<Photo> photos = sqlm.givePhotosWithEmotion(emotion);
+        for(Photo p : photos){
             if (photosOrVideosList.contains(cursor.getInt(0))) {
                 photosOrVideosList.remove((Object) cursor.getInt(0));
             }

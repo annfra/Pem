@@ -24,7 +24,7 @@ public class Level {
     @DatabaseField
     private int pvPerLevel;
     @DatabaseField
-    private boolean isLevelActive;
+    private int isLevelActiveInt;
     @DatabaseField
     private int sublevels;
     @DatabaseField
@@ -39,53 +39,15 @@ public class Level {
 
     private List<Emotion> emotionsList;
     private List<Photo> photosOrVideosList;
-
-
-    public Level(Cursor cur, Cursor cur2, Cursor cur3){
-
-        setPhotosOrVideosList(new ArrayList<Integer>());
-        setEmotions(new ArrayList<Integer>());
-
-        while(cur.moveToNext())
-        {
-            setId(cur.getInt(cur.getColumnIndex("id")));
-            setPhotosOrVideos(cur.getString(cur.getColumnIndex("photos_or_videos")));
-            setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
-            setPvPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
-            int active = cur.getInt(cur.getColumnIndex("is_level_active"));
-
-            setCorrectness(cur.getInt(cur.getColumnIndex("correctness")));
-            setSublevels(cur.getInt(cur.getColumnIndex("sublevels")));
-
-            setLevelActive((active != 0));
-            setName(cur.getString(cur.getColumnIndex("name")));
-        }
-
-        if(cur2 != null){
-
-            while(cur2.moveToNext()){
-                getPhotosOrVideosList().add(cur2.getInt(cur2.getColumnIndex("photoid")));
-
-            }
-        }
-
-        if(cur3 != null){
-
-
-            while(cur3.moveToNext()){
-
-                getEmotions().add(cur3.getInt(cur3.getColumnIndex("emotionid")));
-
-            }
-        }
-
-    }
-
+    private boolean isLevelActive;
 
     public Level(){
 
-        setPhotosOrVideosList(new ArrayList<Integer>());
-        setEmotions(new ArrayList<Integer>());
+        setPhotosOrVideosList(new ArrayList<Photo>());
+        setEmotions(new ArrayList<Emotion>());
+
+        isLevelActive = (isLevelActiveInt == 1 ? true : false);
+
 
         setLevelActive(true);
         setId(0);
@@ -171,5 +133,13 @@ public class Level {
 
     public void setEmotions(List<Emotion> emotions) {
         this.emotionsList = emotions;
+    }
+
+    public int getIsLevelActiveInt() {
+        return isLevelActiveInt;
+    }
+
+    public void setIsLevelActiveInt(int isLevelActiveInt) {
+        this.isLevelActiveInt = isLevelActiveInt;
     }
 }

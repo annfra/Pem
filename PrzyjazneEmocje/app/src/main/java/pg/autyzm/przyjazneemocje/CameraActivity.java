@@ -6,15 +6,19 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.util.ArrayMap;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.Map;
 
 import pg.autyzm.przyjazneemocje.lib.SqlliteManager;
+import pg.autyzm.przyjazneemocje.lib.entities.Photo;
 
 import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
@@ -23,6 +27,7 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
  */
 public class CameraActivity extends Activity {
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,7 @@ public class CameraActivity extends Activity {
         return new File(path, fileName + "tmp.jpg");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private String getFileName(String emotionLang)
     {
         SqlliteManager sqlm = getInstance(this);
@@ -64,12 +70,13 @@ public class CameraActivity extends Activity {
         mapEmo.put(getResources().getString(R.string.emotion_bored), "bored");
 
         String emotion = mapEmo.get(emotionLang);
-        Cursor cur = sqlm.givePhotosWithEmotion(emotion);
+
+        List<Photo> photos = sqlm.givePhotosWithEmotion(emotion);
 
         int maxNumber = 1;
-        while(cur.moveToNext())
+        for(Photo p : photos)
         {
-            String name = cur.getString(3);
+            String name = p.getName();
             name = name.replace(".jpg","").replaceAll("[^0-9]","");
             if(maxNumber < Integer.parseInt(name))
                 maxNumber = Integer.parseInt(name);

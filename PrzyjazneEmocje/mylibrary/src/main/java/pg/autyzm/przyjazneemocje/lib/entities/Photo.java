@@ -1,7 +1,10 @@
 package pg.autyzm.przyjazneemocje.lib.entities;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.util.List;
 
 /**
  * Created by user on 16.11.2017.
@@ -19,8 +22,17 @@ public class Photo {
     @DatabaseField
     private String name;
 
+    @ForeignCollectionField
+    private List<LevelsPhotos> levelsPhotosList;
+
     public Photo(){
 
+    }
+
+    public Photo(int path, String emotion, String name){
+        this.path = path;
+        this.emotion = emotion;
+        this.name = name;
     }
 
 
@@ -54,5 +66,13 @@ public class Photo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<LevelsPhotos> getLevelsPhotosList() {
+        return levelsPhotosList;
+    }
+
+    public void setLevelsPhotosList(List<LevelsPhotos> levelsPhotosList) {
+        this.levelsPhotosList = levelsPhotosList;
     }
 }

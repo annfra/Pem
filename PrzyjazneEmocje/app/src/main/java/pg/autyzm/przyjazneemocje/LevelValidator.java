@@ -1,5 +1,6 @@
 package pg.autyzm.przyjazneemocje;
 
+import pg.autyzm.przyjazneemocje.lib.entities.Emotion;
 import pg.autyzm.przyjazneemocje.lib.entities.Level;
 
 /**
@@ -37,7 +38,7 @@ public class LevelValidator {
 
     public boolean everyEmotionHasAtLestOnePhoto(){
 
-        for(int emotion : validatedLevel.getEmotions()){
+        for(Emotion emotion : validatedLevel.getEmotions()){
 
         }
 
