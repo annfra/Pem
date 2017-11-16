@@ -50,7 +50,6 @@ public class Level {
         if(cur2 != null){
 
             while(cur2.moveToNext()){
-                System.out.println("Cos sie zadzialo");
                 getPhotosOrVideosList().add(cur2.getInt(cur2.getColumnIndex("photoid")));
 
             }
@@ -58,12 +57,10 @@ public class Level {
 
         if(cur3 != null){
 
-            System.out.println("+++");
 
             while(cur3.moveToNext()){
 
                 getEmotions().add(cur3.getInt(cur3.getColumnIndex("emotionid")));
-                System.out.println("+++++" + cur3.getInt(cur3.getColumnIndex("emotionid")));
 
             }
         }

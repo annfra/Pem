@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
 
 
             list.add(levelId);
-            System.out.println("Dodano nowy element do listy");
 
         }
 
@@ -165,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        System.out.println("Item list updated");
 
     }
 }

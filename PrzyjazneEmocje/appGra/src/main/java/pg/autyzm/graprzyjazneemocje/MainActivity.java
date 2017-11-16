@@ -78,7 +78,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         findNextActiveLevel();
 
         generateView(photosToUseInSublevel);
-        System.out.println("Wygenerowano view");
 
         //JG
 
@@ -129,7 +128,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-            System.out.println("---------------Nowy poziom-------------------");
 
             int levelId = 0;
             int photosPerLvL = 0;
@@ -215,7 +213,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             String photoName = curEmotion.getString(curEmotion.getColumnIndex("name"));
 
 
-            //System.out.println(photoEmotionName + " " + selectedEmotionName);
 
             if(photoEmotionName.equals(selectedEmotionName)){
                 photosWithEmotionSelected.add(photoName);
@@ -304,7 +301,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         {
             String root = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
             File fileOut = new File(root + "Emotions" + File.separator + photoName);
-            //System.out.println(root + "Emotions" + File.separator + photoName);
             try {
 
                 ImageView image = new ImageView(MainActivity.this);
@@ -334,9 +330,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     public void onClick(View v) {
-
-
-        //System.out.println(v.getId());
 
 
         if(v.getId() == 1) {
@@ -388,29 +381,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     boolean checkCorrectness(){
-/*
-        double doubleWrongAnswers = wrongAnswersSublevel;
-        double doubleRightAnswers = rightAnswersSublevel;
 
-        // zeby uniknac dzielenia przez zero
-        if(wrongAnswersSublevel + rightAnswersSublevel != 0) {
-
-            System.out.println(doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers));
-            System.out.println((doubleWrongAnswers / (doubleWrongAnswers + doubleRightAnswers) * 100));
-
-            if ((doubleWrongAnswers / doubleWrongAnswers + doubleRightAnswers) * 100 > l.correctness) {
-
-                System.out.println("Dziecko nie powinno przejsc dalej.");
-
-                //Intent i = new Intent(this, LevelFailedActivity.class);
-               // startActivityForResult(i, 2);
-
-                return false;
-
-            }
-        }
-
-*/
 
 
         if(wrongAnswersSublevel > l.getCorrectness()){
@@ -471,7 +442,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 animationEnds = true;
 
                 if(! findNextActiveLevel()){
-                    System.out.println("Skonczyly sie poziomy");
 
                     startEndActivity(true);
                 }
@@ -482,7 +452,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case 2:
 
-                System.out.println("Trzeba zaczas poziom od nowa, bo dziecko dalo za duzo blednych odpowiedzi.");
 
                 java.util.Collections.shuffle(sublevelsList);
                 sublevelsLeft = l.getEmotions().size() * l.getSublevels();

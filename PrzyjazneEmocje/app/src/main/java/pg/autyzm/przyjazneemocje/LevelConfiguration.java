@@ -55,7 +55,6 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         Map<String, String> mapEmo = new ArrayMap<>();
         mapEmo.put("happy",getResources().getString(R.string.emotion_happy));
         mapEmo.put("sad",getResources().getString(R.string.emotion_sad));
-        System.out.println("Dodano emocje");
         mapEmo.put("angry",getResources().getString(R.string.emotion_angry));
         mapEmo.put("scared",getResources().getString(R.string.emotion_scared));
         mapEmo.put("surprised",getResources().getString(R.string.emotion_surprised));
@@ -221,12 +220,10 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
             if(isChecked) {
                 emotionsList.add(emotionNameInLanguage);
-                System.out.println(">>>" + emotionId);
                 emotionsIdsList.add(emotionId);
             }
             if(!isChecked) {
                 emotionsList.remove(emotionNameInLanguage);
-                System.out.println(">>>" + emotionId);
                 emotionsIdsList.remove((Object)emotionId);
                 removeImgEmo(emotionName);
             }

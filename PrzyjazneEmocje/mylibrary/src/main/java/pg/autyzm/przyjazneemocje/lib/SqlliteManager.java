@@ -88,7 +88,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
         if(level.getId() != 0) {
             //values.put("id", level.id);
-            System.out.println("Update, time limit " + level.getTimeLimit());
             db.update("levels", values, "id=" + level.getId(), null);
 
             /*
@@ -106,20 +105,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
         }
 
         // Dodaj rekordy wiele do wielu ze zdjeciami/video
-
-
-
-        System.out.println("addLevel");
-        /*
-        wyswietlenie co jest w obiekcie level przed jego zapisaniem do bazy danych
-
-         */
-        System.out.println("Level name " + level.getName());
-        System.out.println("Is level active " + level.isLevelActive());
-        System.out.println("Time limit " + level.getTimeLimit());
-        System.out.println("Photos per level " + level.getPvPerLevel());
-        System.out.println("Photos or videos " + level.getPhotosOrVideos());
-
 
         for(Integer photoOrVideo : level.getPhotosOrVideosList()){
 
