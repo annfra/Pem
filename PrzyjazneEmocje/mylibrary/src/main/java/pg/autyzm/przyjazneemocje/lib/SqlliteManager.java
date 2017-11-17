@@ -85,7 +85,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("photos_or_videos", level.getPhotosOrVideos());
         values.put("name", level.getName());
-        values.put("photos_or_videos_per_level", level.getPvPerLevel());
+        values.put("photos_or_videos_per_level", level.getPhotosOrVideosPerLevel());
         values.put("time_limit", level.getTimeLimit());
         values.put("is_level_active", level.isLevelActive());
         values.put("correctness", level.getCorrectness());

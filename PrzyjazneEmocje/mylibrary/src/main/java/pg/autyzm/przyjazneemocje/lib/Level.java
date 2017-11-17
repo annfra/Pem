@@ -14,7 +14,7 @@ public class Level {
 
     private String photosOrVideos;
     private int timeLimit;
-    private int pvPerLevel;
+    private int photosOrVideosPerLevel;
     private boolean isLevelActive;
     private boolean isForTests;
     private int sublevels;
@@ -40,7 +40,7 @@ public class Level {
             setId(cur.getInt(cur.getColumnIndex("id")));
             setPhotosOrVideos(cur.getString(cur.getColumnIndex("photos_or_videos")));
             setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
-            setPvPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
+            setPhotosOrVideosPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             setCorrectness(cur.getInt(cur.getColumnIndex("correctness")));
             setSublevels(cur.getInt(cur.getColumnIndex("sublevels")));
             setName(cur.getString(cur.getColumnIndex("name")));
@@ -108,12 +108,12 @@ public class Level {
         this.timeLimit = timeLimit;
     }
 
-    public int getPvPerLevel() {
-        return pvPerLevel;
+    public int getPhotosOrVideosPerLevel() {
+        return photosOrVideosPerLevel;
     }
 
-    public void setPvPerLevel(int pvPerLevel) {
-        this.pvPerLevel = pvPerLevel;
+    public void setPhotosOrVideosPerLevel(int photosOrVideosPerLevel) {
+        this.photosOrVideosPerLevel = photosOrVideosPerLevel;
     }
 
     public boolean isLevelActive() {

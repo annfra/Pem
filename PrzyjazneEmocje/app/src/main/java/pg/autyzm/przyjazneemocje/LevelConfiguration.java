@@ -135,7 +135,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
 
 
         timeLimit.setText(Integer.toString(l.getTimeLimit()));
-        vpPerLevel.setText(Integer.toString(l.getPvPerLevel()));
+        vpPerLevel.setText(Integer.toString(l.getPhotosOrVideosPerLevel()));
         correctness.setText(Integer.toString(l.getCorrectness()));
         sublevels.setText(Integer.toString(l.getSublevels()));
 
@@ -291,7 +291,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         EditText vpPerLevel = (EditText) findViewById(R.id.pv_per_level);
 
         l.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
-        l.setPvPerLevel(Integer.parseInt(vpPerLevel.getText() + ""));
+        l.setPhotosOrVideosPerLevel(Integer.parseInt(vpPerLevel.getText() + ""));
         l.setCorrectness(Integer.parseInt(correctness.getText() + ""));
         l.setSublevels(Integer.parseInt(sublevels.getText() + ""));
 
