@@ -337,23 +337,6 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
                 Bundle bundle = new Bundle();
                 bundle.putString("SpinnerValue", spinner.getSelectedItem().toString());      //TODO gdy mamy zaznaczone wszystkie i jedno się odznaczy to przesyła ostatnio zaznaczoną emocję
 
-                // Birgiel. Dodanie emocji wybranych, gdy lvl byl tworzony
-
-                // przerabiamy krotkie id na dlugie (path)
-
-//                ArrayList<Integer> list = new ArrayList<Integer>();
-
-//                if (l != null){
-//
-//                    for (Integer photoPath : l.photosOrVideosList) {
-//
-//                        Cursor pp = sqlm.givePhotoWithId(photoPath);
-//                        pp.moveToFirst();
-//                        int path = pp.getInt(pp.getColumnIndex("path"));
-//                        list.add(path);
-//
-//                    }
-//                }
 //
                 if(l != null) {
                     bundle.putIntegerArrayList("selected_photos", ( ArrayList<Integer>) l.getPhotosOrVideosList());

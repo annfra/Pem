@@ -35,65 +35,8 @@ public class MainActivity extends AppCompatActivity {
         sqlm = getInstance(this);
 
         updateLevelList();
-        //generate list
-
-        sqlm.cleanTable("photos"); //TODO not clean and add, but only update
-
-        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-
-        File createDir = new File(root + "Emotions" + File.separator);
-        if (!createDir.exists()) {
-            createDir.mkdir();
-
-            Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
-            for (Field f : drawables) {
-                try {
-                    if (IfConstainsEmotionName(f.getName()))
-                    {
-                        String emotName = f.getName();
-                        int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
-
-                        Bitmap bm = BitmapFactory.decodeResource(getResources(), resID);
-
-                        String path = root + "Emotions" + File.separator;
-
-                        File file = new File(path, emotName + ".jpg");
-                        FileOutputStream outStream = new FileOutputStream(file);
-                        bm.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-                        outStream.flush();
-                        outStream.close();
-                    }
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-        if(new File(root + "/Emotions").list() != null) {
-
-            for (String emotName : new File(root + "/Emotions").list()) {
-
-                try {
-                    int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
-                    if (emotName.contains("happy"))
-                        sqlm.addPhoto(resID, "happy", emotName);
-                    else if (emotName.contains("angry"))
-                        sqlm.addPhoto(resID, "angry", emotName);
-                    else if (emotName.contains("surprised"))
-                        sqlm.addPhoto(resID, "surprised", emotName);
-                    else if (emotName.contains("bored"))
-                        sqlm.addPhoto(resID, "bored", emotName);
-                    else if (emotName.contains("scared"))
-                        sqlm.addPhoto(resID, "scared", emotName);
-                    else if (emotName.contains("sad"))
-                        sqlm.addPhoto(resID, "sad", emotName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        preparePhotosFiles();
+        preparePhotosDatabaseRecords();
 
     }
 
@@ -167,4 +110,77 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    void preparePhotosFiles(){
+
+
+
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+
+        File createDir = new File(root + "Emotions" + File.separator);
+        if (!createDir.exists()) {
+            createDir.mkdir();
+
+            Field[] drawables = pg.autyzm.przyjazneemocje.R.drawable.class.getFields();
+            for (Field f : drawables) {
+                try {
+                    if (IfConstainsEmotionName(f.getName()))
+                    {
+                        String emotName = f.getName();
+                        int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
+
+                        Bitmap bm = BitmapFactory.decodeResource(getResources(), resID);
+
+                        String path = root + "Emotions" + File.separator;
+
+                        File file = new File(path, emotName + ".jpg");
+                        FileOutputStream outStream = new FileOutputStream(file);
+                        bm.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+                        outStream.flush();
+                        outStream.close();
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+    }
+
+    void preparePhotosDatabaseRecords(){
+
+        sqlm.cleanTable("photos"); //TODO not clean and add, but only update
+
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+
+
+        if(new File(root + "/Emotions").list() != null) {
+
+            for (String emotName : new File(root + "/Emotions").list()) {
+
+                try {
+                    int resID = getResources().getIdentifier(emotName, "drawable", getPackageName());
+                    if (emotName.contains("happy"))
+                        sqlm.addPhoto(resID, "happy", emotName);
+                    else if (emotName.contains("angry"))
+                        sqlm.addPhoto(resID, "angry", emotName);
+                    else if (emotName.contains("surprised"))
+                        sqlm.addPhoto(resID, "surprised", emotName);
+                    else if (emotName.contains("bored"))
+                        sqlm.addPhoto(resID, "bored", emotName);
+                    else if (emotName.contains("scared"))
+                        sqlm.addPhoto(resID, "scared", emotName);
+                    else if (emotName.contains("sad"))
+                        sqlm.addPhoto(resID, "sad", emotName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+
+
 }

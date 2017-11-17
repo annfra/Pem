@@ -398,17 +398,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 
-
-/*
-    int selectEmotionToChoose(Level l){
-
-        Random rand = new Random();
-
-        int emotionIndexInList = rand.nextInt(l.emotions.size());
-
-        return emotionIndexInList;
-    }
-*/
     String selectPhotoWithSelectedEmotion(){
 
         Random rand = new Random();

@@ -34,7 +34,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     private SqlliteManager (final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 2);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 4);
         db = getWritableDatabase();
     }
 
@@ -43,21 +43,8 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
         this.db = db;
 
-        System.out.println("Tworze tablee");
-        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
-        db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
-        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
-                "time_limit int, is_level_active boolean, name text, correctness int, sublevels int);" + "");
-        db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
-        db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
-
-
-        addEmotion("happy");
-        addEmotion("sad");
-        addEmotion("angry");
-        addEmotion("scared");
-        addEmotion("surprised");
-        addEmotion("bored");
+        createTablesInDatabase();
+        addEmotionsToDatabase();
 
     }
 
@@ -69,7 +56,11 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+        this.db = db;
 
+        deleteTablesFromDatabase();
+        createTablesInDatabase();
+        addEmotionsToDatabase();
     }
 
     public void addEmotion(String emotion)
@@ -99,17 +90,15 @@ public class SqlliteManager extends SQLiteOpenHelper {
         values.put("is_level_active", level.isLevelActive());
         values.put("correctness", level.getCorrectness());
         values.put("sublevels", level.getSublevels());
+        values.put("is_for_tests", level.isForTests());
 
 
         if(level.getId() != 0) {
             //values.put("id", level.id);
             db.update("levels", values, "id=" + level.getId(), null);
 
-            /*
-                usunac wszystkie rekordy polaczone z tym poziomem.
 
-            */
-
+            //usunac wszystkie rekordy polaczone z tym poziomem.
             delete("levels_photos", "levelid", String.valueOf(level.getId()));
             delete("levels_emotions", "levelid", String.valueOf(level.getId()));
 
@@ -123,9 +112,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
         for(Integer photoOrVideo : level.getPhotosOrVideosList()){
 
-
-            System.out.println("Photo id " + photoOrVideo);
-
             values = new ContentValues();
             values.put("levelid", level.getId());
             values.put("photoid",photoOrVideo);
@@ -134,9 +120,6 @@ public class SqlliteManager extends SQLiteOpenHelper {
         }
 
         for(Integer emotion : level.getEmotions()){
-
-
-            System.out.println("Emotion id " + emotion);
 
             values = new ContentValues();
             values.put("levelid", level.getId());
@@ -215,28 +198,19 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     public Cursor giveAllEmotions()
     {
-        String[] columns = {"id","emotion"};//"photos_or_videos", "photos_or_videos_per", "time_limit"
-        Cursor cursor = db.query("emotions", columns,null, null, null, null, null);
+        Cursor cursor =  db.rawQuery("select * from emotions", null);
         return cursor;
     }
 
     public Cursor giveAllLevels()
     {
-        String[] columns = {"id", "photos_or_videos", "is_level_active", "name"};
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
-
+        Cursor cursor =  db.rawQuery("select * from levels", null);
         return cursor;
     }
 
     public Cursor giveLevel(int id)
     {
-        String[] columns = {"id", "photos_or_videos"};
-        Cursor cursor = db.query("levels", columns,null, null, null, null, null);
-
-
-        cursor =  db.rawQuery("select * from levels where id='" + id + "'" , null);
-
-
+        Cursor cursor =  db.rawQuery("select * from levels where id='" + id + "'" , null);
         return cursor;
     }
 
@@ -251,5 +225,38 @@ public class SqlliteManager extends SQLiteOpenHelper {
                 return cursor.getString(2);
         }
         return "Fail";
+    }
+
+
+    private void createTablesInDatabase(){
+
+        System.out.println("Tworze tablee");
+        db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
+        db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
+        db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
+                "time_limit int, is_level_active int, name text, correctness int, sublevels int, is_for_tests int);" + "");
+        db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
+        db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
+
+
+    }
+
+    private void deleteTablesFromDatabase(){
+
+        db.execSQL("drop table levels_emotions");
+        db.execSQL("drop table levels_photos");
+        db.execSQL("drop table levels");
+        db.execSQL("drop table emotions");
+        db.execSQL("drop table photos");
+    }
+
+    private void addEmotionsToDatabase(){
+
+        addEmotion("happy");
+        addEmotion("sad");
+        addEmotion("angry");
+        addEmotion("scared");
+        addEmotion("surprised");
+        addEmotion("bored");
     }
 }

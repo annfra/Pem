@@ -16,6 +16,7 @@ public class Level {
     private int timeLimit;
     private int pvPerLevel;
     private boolean isLevelActive;
+    private boolean isForTests;
     private int sublevels;
     private int correctness;
 
@@ -38,13 +39,14 @@ public class Level {
             setPhotosOrVideos(cur.getString(cur.getColumnIndex("photos_or_videos")));
             setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
             setPvPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
-            int active = cur.getInt(cur.getColumnIndex("is_level_active"));
-
             setCorrectness(cur.getInt(cur.getColumnIndex("correctness")));
             setSublevels(cur.getInt(cur.getColumnIndex("sublevels")));
-
-            setLevelActive((active != 0));
             setName(cur.getString(cur.getColumnIndex("name")));
+
+            int active = cur.getInt(cur.getColumnIndex("is_level_active"));
+            setLevelActive((active != 0));
+            int isForTests = cur.getInt(cur.getColumnIndex("is_for_tests"));
+            setForTests((isForTests != 0));
         }
 
         if(cur2 != null){
@@ -74,6 +76,7 @@ public class Level {
         setEmotions(new ArrayList<Integer>());
 
         setLevelActive(true);
+        setForTests(true);
         setId(0);
 
     }
@@ -157,5 +160,13 @@ public class Level {
 
     public void setEmotions(List<Integer> emotions) {
         this.emotions = emotions;
+    }
+
+    public boolean isForTests() {
+        return isForTests;
+    }
+
+    public void setForTests(boolean forTests) {
+        isForTests = forTests;
     }
 }

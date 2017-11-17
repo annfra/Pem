@@ -88,19 +88,6 @@ public class CameraActivity extends Activity {
                     File largeFile = new File(path, fileName + "tmp.jpg");
                     Bitmap largeBitmap = BitmapFactory.decodeFile(largeFile.getAbsolutePath());
 
-                    /*final int maxSize = 400;
-                    int outWidth;
-                    int outHeight;
-                    int inWidth = largeBitmap.getWidth();
-                    int inHeight = largeBitmap.getHeight();
-                    if(inWidth > inHeight){
-                        outWidth = maxSize;
-                        outHeight = (inHeight * maxSize) / inWidth;
-                    } else {
-                        outHeight = maxSize;
-                        outWidth = (inWidth * maxSize) / inHeight;
-                    }*/
-
                     Bitmap smallBitmap = Bitmap.createScaledBitmap(largeBitmap,largeBitmap.getWidth() * 1/4,largeBitmap.getHeight()*1/4,false);
 
                     File smallFile = new File(path, fileName + ".jpg");
