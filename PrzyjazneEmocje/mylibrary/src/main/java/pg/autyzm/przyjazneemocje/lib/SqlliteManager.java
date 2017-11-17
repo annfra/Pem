@@ -34,7 +34,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
 
     private SqlliteManager (final Context context)
     {
-        super(new DatabaseContext(context), DATABASE_NAME, null, 4);
+        super(new DatabaseContext(context), DATABASE_NAME, null, 5);
         db = getWritableDatabase();
     }
 
@@ -89,7 +89,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         values.put("time_limit", level.getTimeLimit());
         values.put("is_level_active", level.isLevelActive());
         values.put("correctness", level.getCorrectness());
-        values.put("sublevels", level.getSublevels());
+        values.put("sublevels_per_each_emotion", level.getSublevelsPerEachEmotion());
         values.put("is_for_tests", level.isForTests());
 
 
@@ -234,7 +234,7 @@ public class SqlliteManager extends SQLiteOpenHelper {
         db.execSQL("create table photos(" + "id integer primary key autoincrement," + "path int," + "emotion text," + "name text);" + "");
         db.execSQL("create table emotions(" + "id integer primary key autoincrement," + "emotion text);" + "");
         db.execSQL("create table levels(" + "id integer primary key autoincrement, photos_or_videos text, photos_or_videos_per_level int, " +
-                "time_limit int, is_level_active int, name text, correctness int, sublevels int, is_for_tests int);" + "");
+                "time_limit int, is_level_active int, name text, correctness int, sublevels_per_each_emotion int, is_for_tests int);" + "");
         db.execSQL("create table levels_photos(" + "id integer primary key autoincrement,"  + "levelid integer references levels(id)," + "photoid integer references photos(id));" + "");
         db.execSQL("create table levels_emotions(" + "id integer primary key autoincrement," + "levelid integer references levels(id),"  + "emotionid integer references emotions(id));" + "");
 

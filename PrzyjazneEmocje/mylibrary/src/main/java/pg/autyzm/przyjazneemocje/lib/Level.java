@@ -17,7 +17,7 @@ public class Level {
     private int photosOrVideosPerLevel;
     private boolean isLevelActive;
     private boolean isForTests;
-    private int sublevels;
+    private int sublevelsPerEachEmotion;
     private int correctness;
 
     private String name;
@@ -42,7 +42,7 @@ public class Level {
             setTimeLimit(cur.getInt(cur.getColumnIndex("time_limit")));
             setPhotosOrVideosPerLevel(cur.getInt(cur.getColumnIndex("photos_or_videos_per_level")));
             setCorrectness(cur.getInt(cur.getColumnIndex("correctness")));
-            setSublevels(cur.getInt(cur.getColumnIndex("sublevels")));
+            setSublevelsPerEachEmotion(cur.getInt(cur.getColumnIndex("sublevels_per_each_emotion")));
             setName(cur.getString(cur.getColumnIndex("name")));
 
             int active = cur.getInt(cur.getColumnIndex("is_level_active"));
@@ -124,12 +124,12 @@ public class Level {
         isLevelActive = levelActive;
     }
 
-    public int getSublevels() {
-        return sublevels;
+    public int getSublevelsPerEachEmotion() {
+        return sublevelsPerEachEmotion;
     }
 
-    public void setSublevels(int sublevels) {
-        this.sublevels = sublevels;
+    public void setSublevelsPerEachEmotion(int sublevelsPerEachEmotion) {
+        this.sublevelsPerEachEmotion = sublevelsPerEachEmotion;
     }
 
     public int getCorrectness() {
@@ -171,4 +171,11 @@ public class Level {
     public void setForTests(boolean forTests) {
         isForTests = forTests;
     }
+
+
+    public int getAllSublevelsInLevelAmount(){
+        return emotions.size() * sublevelsPerEachEmotion;
+    }
+
+
 }

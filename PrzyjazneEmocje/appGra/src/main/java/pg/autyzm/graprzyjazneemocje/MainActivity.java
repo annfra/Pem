@@ -35,14 +35,13 @@ import static pg.autyzm.przyjazneemocje.lib.SqlliteManager.getInstance;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+
+    List<LevelInGame> levelsInGame = new ArrayList<>();
     List<Level> levels = new ArrayList<>();
-    private int currentLevelNumber;
-    private int currentSubLevelNumber;
+    LevelInGame currentLevelInGame;
 
 
-    int amountOfSublevelsLeft;
-    // for example [1, 2, 2, 1] - sublevel when you have to guess emotion with id = 1, sublevel [...] id = 2 etc.
-    List<Integer> sublevelsList;
+
 
     List<String> photosWithEmotionSelected;
     List<String> photosWithRestOfEmotions;
@@ -51,13 +50,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     SqlliteManager sqlm;
     int wrongAnswers;
     int rightAnswers;
-    int wrongAnswersSublevel;
-    int rightAnswersSublevel;
     int timeout;
-    int timeoutSubLevel;
     String commandText;
-    boolean animationEnds = true;
-    Level currentLevel;
+
     CountDownTimer timer;
     public Speaker speaker;
 
@@ -79,14 +74,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         sqlm = getInstance(this);
         loadLevelsFromDatabase();
+        prepareLevelsInGame();
 
 
-        if(levels.size() != 0){
-            getNextSublevel();
-        }else {
-            startEndActivity(true);
-        }
-        //JG
+
+        generateNextSublevel();
 
         speaker = Speaker.getInstance(MainActivity.this);
 
@@ -97,8 +89,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 speaker.speak(commandText);
             }
         });
-
-
 
     }
 
@@ -121,40 +111,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    void prepareLevel(){
-
-        currentLevel = levels.get(currentLevelNumber);
-
-
-        wrongAnswersSublevel = 0;
-        rightAnswersSublevel = 0;
-        timeoutSubLevel = 0;
-
-        // tworzymy tablice do permutowania
-
-        amountOfSublevelsLeft = currentLevel.getEmotions().size() * currentLevel.getSublevels();
-
-        sublevelsList = new ArrayList<Integer>();
-
-        for(int i = 0; i < currentLevel.getEmotions().size(); i++){
-
-            for(int j = 0; j < currentLevel.getSublevels(); j++){
-
-                sublevelsList.add(currentLevel.getEmotions().get(i));
-
-            }
-
-        }
-
-        java.util.Collections.shuffle(sublevelsList);
-
-    }
 
 
 
 
 
-    void generateSublevel(int emotionIndexInList){
+
+    void prepareImagesForNextSublevel(int emotionIndexInList){
 
 
         Cursor emotionCur = sqlm.giveEmotionName(emotionIndexInList);
@@ -169,18 +132,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-        for(int e : currentLevel.getPhotosOrVideosList()){
+        for(int e : currentLevelInGame.getLevelFromDatabase().getPhotosOrVideosList()){
 
-            //System.out.println("Id zdjecia: " + e);
             Cursor curEmotion = sqlm.givePhotoWithId(e);
-
-
 
             curEmotion.moveToFirst();
             String photoEmotionName = curEmotion.getString(curEmotion.getColumnIndex("emotion"));
             String photoName = curEmotion.getString(curEmotion.getColumnIndex("name"));
-
-
 
             if(photoEmotionName.equals(selectedEmotionName)){
                 photosWithEmotionSelected.add(photoName);
@@ -198,7 +156,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // z listy b wybieramy zdjecia nieprawidlowe
 
-        selectPhotoWithNotSelectedEmotions(currentLevel.getPhotosOrVideosPerLevel());
+        selectPhotoWithNotSelectedEmotions(currentLevelInGame.getLevelFromDatabase().getPhotosOrVideosPerLevel());
 
         // laczymy dobra odpowiedz z reszta wybranych zdjec i przekazujemy to dalej
 
@@ -209,7 +167,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         // z tego co rozumiem w photosList powinny byc name wszystkich zdjec, jakie maja sie pojawic w lvl (czyli - 3 pozycje)
 
-        StartTimer(currentLevel);
+        StartTimer(currentLevelInGame.getLevelFromDatabase());
 
     }
 
@@ -267,52 +225,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         if(v.getId() == 1) {
-            animationEnds = false;
-            amountOfSublevelsLeft--;
+
             rightAnswers++;
-            rightAnswersSublevel++;
+            currentLevelInGame.incrementRightAnswersSublevel();
             timer.cancel();
 
-            boolean correctness = true;
-
-            if(amountOfSublevelsLeft == 0) {
-                correctness = checkCorrectness();
-            }
-
-            if(correctness) {
+            if(checkCorrectness()) {
                 Intent i = new Intent(this, AnimationActivity.class);
                 startActivityForResult(i, REQUEST_CODE_SUBLEVEL_END);
-
             }
             else{
                 startEndActivity(false);
-
-
+                currentLevelInGame.resetLevelCounters();
             }
         }
         else //jesli nie wybrano wlasciwej
         {
             wrongAnswers++;
-            wrongAnswersSublevel++;
+            currentLevelInGame.incrementWrongAnswersSublevel();
         }
-
-
-
-
     }
 
     boolean checkCorrectness(){
 
-
-
-        if(wrongAnswersSublevel > currentLevel.getCorrectness()){
-
-            return false;
-
-        }
-
-
-        return true;
+        return currentLevelInGame.getWrongAnswersSublevel() > currentLevelInGame.getLevelFromDatabase().getCorrectness() ? false : true;
 
     }
 
@@ -348,13 +284,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        animationEnds = true;
-
-        if(currentLevelNumber == levels.size() - 1) {
-            startEndActivity(true);
-        }
-
-        getNextSublevel();
+        generateNextSublevel();
     }
 
     private void startEndActivity(boolean pass){
@@ -367,7 +297,68 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         startActivityForResult(in, REQUEST_CODE_GAME_END);
 
-        //startActivity(in);
+    }
+
+
+
+    private void generateNextSublevel(){
+
+        getNextLevel();
+
+        if(currentLevelInGame == null) {
+            startEndActivity(true);
+            resetGameCounters();
+        } else {
+            prepareImagesForNextSublevel(currentLevelInGame.getSublevelsList().get(currentLevelInGame.getCurrentSublevelNumber()));
+            displaySublevel(photosToUseInSublevel);
+        }
+
+
+    }
+
+    boolean getNextLevel(){
+
+        currentLevelInGame = null;
+        for(LevelInGame levelInGame : levelsInGame){
+
+            levelInGame.nextSublevel();
+
+            if(levelInGame.isLevelPassed())
+                continue;
+            else{
+                currentLevelInGame = levelInGame;
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+
+
+    private void resetGameCounters(){
+        wrongAnswers = 0;
+        rightAnswers = 0;
+        timeout = 0;
+
+        resetCountersForAllLevels();
+    }
+
+    void resetCountersForAllLevels(){
+
+        for(LevelInGame level : levelsInGame){
+            level.resetLevelCounters();
+        }
+    }
+
+    void prepareLevelsInGame(){
+
+        for(Level level : levels){
+            LevelInGame newLevelInGame = new LevelInGame(level);
+            newLevelInGame.prepareLevel();
+            levelsInGame.add(newLevelInGame);
+        }
     }
 
     private void StartTimer(Level l)
@@ -404,32 +395,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     }
                     timeout ++;
-                    timeoutSubLevel++;
+                    currentLevelInGame.incrementTimeoutSublevel();
                 }
             }.start();
 
         }
     }
 
-    private void getNextSublevel(){
-
-        // when starting or restarting game, reset counters
-        if(currentLevelNumber == levels.size() || currentLevelNumber == -1) {
-            currentLevelNumber = -1;
-            wrongAnswers = 0;
-            rightAnswers = 0;
-            timeout = 0;
-        }
-
-        if(amountOfSublevelsLeft == 0) {
-            currentLevelNumber++;
-            prepareLevel();
-        }
-
-        generateSublevel(sublevelsList.get(amountOfSublevelsLeft - 1));
-        displaySublevel(photosToUseInSublevel);
-
-
-    }
 
 }

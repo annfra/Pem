@@ -2,6 +2,8 @@ package pg.autyzm.przyjazneemocje;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -137,7 +139,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         timeLimit.setText(Integer.toString(l.getTimeLimit()));
         vpPerLevel.setText(Integer.toString(l.getPhotosOrVideosPerLevel()));
         correctness.setText(Integer.toString(l.getCorrectness()));
-        sublevels.setText(Integer.toString(l.getSublevels()));
+        sublevels.setText(Integer.toString(l.getSublevelsPerEachEmotion()));
 
 
 
@@ -196,6 +198,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
     {
 
 
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
         {
@@ -293,7 +296,7 @@ public class LevelConfiguration extends AppCompatActivity implements View.OnClic
         l.setTimeLimit(Integer.parseInt(timeLimit.getText() + ""));
         l.setPhotosOrVideosPerLevel(Integer.parseInt(vpPerLevel.getText() + ""));
         l.setCorrectness(Integer.parseInt(correctness.getText() + ""));
-        l.setSublevels(Integer.parseInt(sublevels.getText() + ""));
+        l.setSublevelsPerEachEmotion(Integer.parseInt(sublevels.getText() + ""));
 
         l.setName(levelName.getText().toString());
 
