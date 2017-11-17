@@ -22,7 +22,9 @@ public class Level {
 
     private String name;
 
+    // ids of records from photos table
     private List<Integer> photosOrVideosList;
+    // ids of records from emotions table
     private List<Integer> emotions;
 
 

@@ -27,7 +27,7 @@ public class LevelValidator {
         if(validatedLevel.getEmotions().size() < 2 || validatedLevel.getPhotosOrVideosList().size() == 0){
             return false;
         }
-        if(everyEmotionHasAtLestOnePhoto()){
+        if(everyEmotionHasAtLeastOnePhoto()){
             return true;
         }
         else {
@@ -35,7 +35,7 @@ public class LevelValidator {
         }
     }
 
-    public boolean everyEmotionHasAtLestOnePhoto(){
+    public boolean everyEmotionHasAtLeastOnePhoto(){
 
         for(int emotion : validatedLevel.getEmotions()){
 
